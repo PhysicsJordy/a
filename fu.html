@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>복합 시뮬레이션 도구</title>
+    <title>바람의나라 시뮬레이터</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="tab">
         <button class="tablinks" onclick="openSection(event, 'EnhancementMaterialSim')">강화 재료 시뮬레이션</button>
         <button class="tablinks" onclick="openSection(event, 'CraftingMaterialSim')">제작 재료 시뮬레이션</button>
-        <button class="tablinks" onclick="openSection(event, 'EnhancementSim')">강화 시뮬레이터</button>
+        <button class="tablinks" onclick="openSection(event, 'EnhancementSim')">강화 시뮬레이션</button>
     </div>
 
     <div id="EnhancementMaterialSim" class="tabcontent">
         <h1>강화 재료 시뮬레이션</h1>
-        <label for="stageSelect">단계 선택:</label>
+        <label for="stageSelect">강화상자 레벨 선택:</label>
         <select id="stageSelect">
             <option value="1">단계 1</option>
             <option value="2">단계 2</option>
@@ -30,12 +30,13 @@
         </select>
         <input type="number" id="numTrialsInput" placeholder="시도 횟수">
         <button onclick="randomSelectAndSort()">시뮬레이션 실행</button>
+        <label for="stageSelect">create by 죠링이@연</label>
         <div id="selectionResults"></div>
     </div>
 
     <div id="CraftingMaterialSim" class="tabcontent">
         <h1>제작 재료 시뮬레이션</h1>
-        <label for="craftingStageSelect">단계 선택:</label>
+        <label for="craftingStageSelect">재료상자 레벨 선택:</label>
         <select id="craftingStageSelect">
             <option value="1">단계 1</option>
             <option value="2">단계 2</option>
@@ -50,6 +51,7 @@
         </select>
         <input type="number" id="craftingNumTrialsInput" placeholder="시도 횟수">
         <button onclick="craftingRandomSelectAndSort()">시뮬레이션 실행</button>
+        <label for="stageSelect">create by 죠링이@연</label>
         <div id="craftingSelectionResults"></div>
     </div>
     <script src="scripts.js"></script>
@@ -65,7 +67,6 @@
         <option value="타계">타계</option>
         <option value="환웅">환웅</option>
         <option value="용">용</option>   
-        <!-- 추가 지역 옵션 -->
     </select>
     <select id="partTypeSelect">
         <option value="무기">무기</option>
@@ -79,11 +80,11 @@
         <option value="얼굴장식">얼굴장식</option>
         <option value="신발">신발</option>
         <option value="목걸이">목걸이</option>
-        <!-- 추가 장비 종류 옵션 -->
     </select>
-    <input type="number" id="currentStage" placeholder="현재 강화수">
-    <input type="number" id="targetStage" placeholder="목표 강화수">
+    <input type="number" id="currentStage" placeholder="현재 강화 수">
+    <input type="number" id="targetStage" placeholder="목표 강화 수">
     <input type="number" id="numTrials" placeholder="최대 제작 개수">
     <button onclick="enhanceSimulator()">시뮬레이션 실행</button>
+    <label for="stageSelect">create by 죠링이@연</label>
     <div id="resultsDisplay"></div>
 </div>
