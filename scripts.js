@@ -1361,7 +1361,6 @@ function randomSelectAndSort() {
     const numTrials = parseInt(document.getElementById('numTrialsInput').value, 10);
     const resultsDiv = document.getElementById('selectionResults');
   
-    // 시도 횟수가 10만회를 초과하면 경고 표시하고 함수 종료
     if (numTrials > 100000) {
         alert("시도 횟수는 10만회를 넘을 수 없습니다.");
         return;
@@ -1447,7 +1446,7 @@ function enhanceSimulator() {
         return;
     }
 
-      if (partTypeSelect === '용' && currentStage > 9 && numTrials > 100) {
+      if (partTypeSelect === '용' && targetStage > 9 && numTrials > 100) {
         alert("9류 이상의 용장비를 목표로 할 땐 시행횟수 100회를 넘을 수 없습니다.");
         return;
     }
