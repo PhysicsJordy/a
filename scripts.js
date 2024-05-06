@@ -1456,6 +1456,12 @@ function enhanceSimulator() {
         return;
     }
 
+
+      if (region === '용' && targetStage > 8 && targetStage - currentStage >= 7 && numTrials > 2) {
+        alert("연산량이 매우 많습니다. 시행횟수 2회를 넘을 수 없습니다.");
+        return;
+    }
+  
   
     if (currentStage > 10) {
         alert("현재 단계는 10 이하 값을 작성해주세요.");
