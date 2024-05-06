@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>복합 시뮬레이션 도구</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="tab">
+        <button class="tablinks" onclick="openSection(event, 'EnhancementMaterialSim')">강화 재료 시뮬레이션</button>
+        <button class="tablinks" onclick="openSection(event, 'CraftingMaterialSim')">제작 재료 시뮬레이션</button>
+        <button class="tablinks" onclick="openSection(event, 'EnhancementSim')">강화 시뮬레이터</button>
+    </div>
+
+    <div id="EnhancementMaterialSim" class="tabcontent">
+        <h1>강화 재료 시뮬레이션</h1>
+        <label for="stageSelect">단계 선택:</label>
+        <select id="stageSelect">
+            <option value="1">단계 1</option>
+            <option value="2">단계 2</option>
+            <option value="3">단계 3</option>
+            <option value="4">단계 4</option>
+            <option value="5">단계 5</option>
+            <option value="6">단계 6</option>
+            <option value="7">단계 7</option>
+            <option value="8">단계 8</option>
+            <option value="9">단계 9</option>
+            <option value="10">단계 10</option>
+        </select>
+        <input type="number" id="numTrialsInput" placeholder="시도 횟수">
+        <button onclick="randomSelectAndSort()">시뮬레이션 실행</button>
+        <div id="selectionResults"></div>
+    </div>
+
+    <div id="CraftingMaterialSim" class="tabcontent">
+        <h1>제작 재료 시뮬레이션</h1>
+        <label for="craftingStageSelect">단계 선택:</label>
+        <select id="craftingStageSelect">
+            <option value="1">단계 1</option>
+            <option value="2">단계 2</option>
+            <option value="3">단계 3</option>
+            <option value="4">단계 4</option>
+            <option value="5">단계 5</option>
+            <option value="6">단계 6</option>
+            <option value="7">단계 7</option>
+            <option value="8">단계 8</option>
+            <option value="9">단계 9</option>
+            <option value="10">단계 10</option>
+        </select>
+        <input type="number" id="craftingNumTrialsInput" placeholder="시도 횟수">
+        <button onclick="craftingRandomSelectAndSort()">시뮬레이션 실행</button>
+        <div id="craftingSelectionResults"></div>
+    </div>
+    <script src="scripts.js"></script>
+
+</body>
+</html>
+
+<div id="EnhancementSim" class="tabcontent">
+    <h1>강화 시뮬레이터</h1>
+    <select id="regionSelect">
+        <option value="일본">일본</option>
+        <option value="중국">중국</option>
+        <option value="타계">타계</option>
+        <option value="환웅">환웅</option>
+        <option value="용">용</option>   
+        <!-- 추가 지역 옵션 -->
+    </select>
+    <select id="partTypeSelect">
+        <option value="무기">무기</option>
+        <option value="갑옷">갑옷</option>
+        <option value="투구">투구</option>
+        <option value="망토">망토</option>
+        <option value="방패">방패</option>
+        <option value="손">손</option>
+        <option value="흑광">흑광</option>
+        <option value="용안불꽃">용안불꽃</option>
+        <option value="얼굴장식">얼굴장식</option>
+        <option value="신발">신발</option>
+        <option value="목걸이">목걸이</option>
+        <!-- 추가 장비 종류 옵션 -->
+    </select>
+    <input type="number" id="currentStage" placeholder="현재 강화수">
+    <input type="number" id="targetStage" placeholder="목표 강화수">
+    <input type="number" id="numTrials" placeholder="최대 제작 개수">
+    <button onclick="enhanceSimulator()">시뮬레이션 실행</button>
+    <div id="resultsDisplay"></div>
+</div>
