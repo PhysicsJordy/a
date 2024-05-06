@@ -1435,11 +1435,10 @@ function craftingRandomSelectAndSort() {
     const resultsHTML = sortedItems.map(item => `${item}: ${counts[item]}`).join('<br>');
     resultsDiv.innerHTML = resultsHTML;
 }
-
 function enhanceSimulator() {
-    const currentStage = parseInt(document.getElementById('currentStage').value);
-    const targetStage = parseInt(document.getElementById('targetStage').value);
-    const numTrials = parseInt(document.getElementById('numTrials').value);
+    const currentStage = parseInt(document.getElementById('currentStage').value, 10);
+    const targetStage = parseInt(document.getElementById('targetStage').value, 10);
+    const numTrials = parseInt(document.getElementById('numTrials').value, 10);
     const region = document.getElementById('regionSelect').value;
     const partType = document.getElementById('partTypeSelect').value;
 
@@ -1448,7 +1447,7 @@ function enhanceSimulator() {
         return;
     }
 
-    if (targettStage > 10) {
+    if (targetStage > 10) {
         alert("목표 단계는 10 이하 값을 작성해주세요.");
         return;
     }
@@ -1458,19 +1457,24 @@ function enhanceSimulator() {
         return;
     }
 
-    if (targetStage - currentStage >= 8 && numTrials > 10) {
-        alert("현재 단계와 강화 단계의 차이가 매우 클 경우 최대 연산량은 10회로 제한됩니다.");
-        return;
+    // 조건 검사를 최적화하여 중복을 줄임
+    if (targetStage - currentStage >= 8) {
+        if (numTrials > 10) {
+            alert("현재 단계와 강화 단계의 차이가 매우 클 경우 최대 연산량은 10회로 제한됩니다.");
+            return;
+        }
+    } else if (targetStage - currentStage >= 6) {
+        if (numTrials > 100) {
+            alert("현재 단계와 강화 단계의 차이가 클 경우 최대 연산량은 100회로 제한됩니다.");
+            return;
+        }
     }
-    if (targetStage - currentStage >= 6 && numTrials > 100) {
-        alert("현재 단계와 강화 단계의 차이가 클 경우 최대 연산량은 100회로 제한됩니다.");
-        return;
-    }
+
     if (numTrials > 10000) {
         alert("최대 시행 가능 횟수는 10,000회 입니다.");
         return;
     }
-
+  
     let results = { success: 0, maintain: 0, fail: 0 };
     let stageAttempts = Array(targetStage).fill(0); // 각 단계별 시도 횟수를 저장할 배열
 
