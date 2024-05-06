@@ -1446,7 +1446,7 @@ function enhanceSimulator() {
         return;
     }
 
-      if (region === '용' && targetStage > 9 && numTrials > 100) {
+      if (region === '용' && targetStage > 8 && numTrials > 100) {
         alert("9류 이상의 용장비를 목표로 할 땐 시행횟수 100회를 넘을 수 없습니다.");
         return;
     }
