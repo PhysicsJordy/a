@@ -1565,9 +1565,9 @@ function displayResults(results, stageAttempts, numTrials) {
             return amount + '원';
         }
     }    
-    output += `<br>(평균값)총 소모 비용: ${formatCurrency(totalCost)}<br>`;
+    output += `<br>(평균값) 총 소모 비용: ${formatCurrency(totalCost)}<br>`;
     Object.keys(totalMaterials).forEach(material => {
-        output += `(평균값)총 사용된 ${material}: ${Math.round(totalMaterials[material])}개<br>`;
+        output += `(평균값) 총 사용된 ${material}: ${Math.round(totalMaterials[material])}개<br>`;
     });
 
     document.getElementById('resultsDisplay').innerHTML = output;
