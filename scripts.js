@@ -1443,6 +1443,21 @@ function enhanceSimulator() {
     const region = document.getElementById('regionSelect').value;
     const partType = document.getElementById('partTypeSelect').value;
 
+    if (currentStage > 10) {
+        alert("현재 단계는 10 이하 값을 작성해주세요.");
+        return;
+    }
+
+    if (targettStage > 10) {
+        alert("목표 단계는 10 이하 값을 작성해주세요.");
+        return;
+    }
+
+    if (currentStage > targetStage) {
+        alert("목표단계가 현재 단계보다 더 높아야 합니다.");
+        return;
+    }
+
     if (targetStage - currentStage >= 8 && numTrials > 10) {
         alert("현재 단계와 강화 단계의 차이가 매우 클 경우 최대 연산량은 10회로 제한됩니다.");
         return;
