@@ -1356,31 +1356,38 @@ const enhancementData = [
 ]
 
 
-  function randomSelectAndSort() {
+function randomSelectAndSort() {
     const stage = document.getElementById('stageSelect').value;
     const numTrials = parseInt(document.getElementById('numTrialsInput').value, 10);
     const resultsDiv = document.getElementById('selectionResults');
   
+    // 시도 횟수가 10만회를 초과하면 경고 표시하고 함수 종료
+    if (numTrials > 100000) {
+        alert("시도 횟수는 10만회를 넘을 수 없습니다.");
+        return;
+    }
+
     // 선택된 단계의 아이템만 필터링
     const filteredItems = DitemData.filter(item => item[0] === parseInt(stage));
     let counts = {};
   
     for (let i = 0; i < numTrials; i++) {
-      let totalProbability = 0;
-      let rand = Math.random();
-      for (const item of filteredItems) {
-        totalProbability += item[2];
-        if (rand <= totalProbability) {
-          counts[item[1]] = counts[item[1]] ? counts[item[1]] + 1 : 1;
-          break;
+        let totalProbability = 0;
+        let rand = Math.random();
+        for (const item of filteredItems) {
+            totalProbability += item[2];
+            if (rand <= totalProbability) {
+                counts[item[1]] = counts[item[1]] ? counts[item[1]] + 1 : 1;
+                break;
+            }
         }
-      }
     }
   
     const sortedItems = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
     const resultsHTML = sortedItems.map(item => `${item}: ${counts[item]}`).join('<br>');
     resultsDiv.innerHTML = resultsHTML;
 }
+
 
   function openSection(evt, sectionName) {
     var i, tabcontent, tablinks;
@@ -1407,7 +1414,11 @@ function craftingRandomSelectAndSort() {
     // craftingItemData 배열에서 선택된 단계에 해당하는 아이템만 필터링
     const filteredItems = craftingItemData.filter(item => item[0] === parseInt(stage));
     let counts = {};
-
+        // 시도 횟수가 10만회를 초과하면 경고 표시하고 함수 종료
+        if (numTrials > 100000) {
+            alert("시도 횟수는 10만회를 넘을 수 없습니다.");
+            return;
+        }
     for (let i = 0; i < numTrials; i++) {
         let totalProbability = 0;
         let rand = Math.random();
@@ -1431,6 +1442,19 @@ function enhanceSimulator() {
     const numTrials = parseInt(document.getElementById('numTrials').value);
     const region = document.getElementById('regionSelect').value;
     const partType = document.getElementById('partTypeSelect').value;
+
+    if (targetStage - currentStage >= 8 && numTrials > 10) {
+        alert("현재 단계와 강화 단계의 차이가 매우 클 경우 최대 연산량은 10회로 제한됩니다.");
+        return;
+    }
+    if (targetStage - currentStage >= 6 && numTrials > 100) {
+        alert("현재 단계와 강화 단계의 차이가 클 경우 최대 연산량은 100회로 제한됩니다.");
+        return;
+    }
+    if (numTrials > 10000) {
+        alert("최대 시행 가능 횟수는 10,000회 입니다.");
+        return;
+    }
 
     let results = { success: 0, maintain: 0, fail: 0 };
     let stageAttempts = Array(targetStage).fill(0); // 각 단계별 시도 횟수를 저장할 배열
@@ -1522,9 +1546,9 @@ function displayResults(results, stageAttempts, numTrials) {
             return amount + '원';
         }
     }    
-    output += `<br>총 소모 비용: ${formatCurrency(totalCost)}<br>`;
+    output += `<br>(평균값)총 소모 비용: ${formatCurrency(totalCost)}<br>`;
     Object.keys(totalMaterials).forEach(material => {
-        output += `총 사용된 ${material}: ${Math.round(totalMaterials[material])}개<br>`;
+        output += `(평균값)총 사용된 ${material}: ${Math.round(totalMaterials[material])}개<br>`;
     });
 
     document.getElementById('resultsDisplay').innerHTML = output;
