@@ -1441,12 +1441,12 @@ function enhanceSimulator() {
     const region = document.getElementById('regionSelect').value;
     const partType = document.getElementById('partTypeSelect').value;
 
-    if (partTypeSelect === '용' && numTrials > 1000) {
+    if (regionSelect === '용' && numTrials > 1000) {
         alert("용장비는 시행횟수 1000회를 넘을 수 없습니다.");
         return;
     }
 
-      if (partTypeSelect === '용' && targetStage > 9 && numTrials > 100) {
+      if (regionSelect === '용' && targetStage > 9 && numTrials > 100) {
         alert("9류 이상의 용장비를 목표로 할 땐 시행횟수 100회를 넘을 수 없습니다.");
         return;
     }
