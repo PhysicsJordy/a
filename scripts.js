@@ -1442,6 +1442,16 @@ function enhanceSimulator() {
     const region = document.getElementById('regionSelect').value;
     const partType = document.getElementById('partTypeSelect').value;
 
+    if (partTypeSelect === '용' && numTrials > 1000) {
+        alert("용장비는 시행횟수 1000회를 넘을 수 없습니다.");
+        return;
+    }
+
+      if (partTypeSelect === '용' && currentStage > 9 && numTrials > 100) {
+        alert("9류 이상의 용장비를 목표로 할 땐 시행횟수 100회를 넘을 수 없습니다.");
+        return;
+    }
+
     if (currentStage > 10) {
         alert("현재 단계는 10 이하 값을 작성해주세요.");
         return;
