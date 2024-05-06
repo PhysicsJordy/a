@@ -1541,6 +1541,29 @@ function simulateOutcome(stageResults) {
     return '실패';
 }
 
+//
+function updateMaterialNames(material, region) {
+    const suffixes = {
+        "중국": "겁화의",
+        "일본": "태염신의",
+        "환웅": "천제의",
+        "타계": "거마족의",
+        "용": "은나무"
+    };
+
+    const exceptions = {
+        "타계": { "보물": "혼" },
+        "용": { "보물": "가지" }
+    };
+
+    // 예외 처리
+    if (exceptions[region] && exceptions[region][material]) {
+        return suffixes[region] + exceptions[region][material];
+    }
+
+    return suffixes[region] + material;
+}
+
 function displayResults(results, stageAttempts, numTrials) {
     let output = `성공: ${results.success}, 유지: ${results.maintain}, 실패: ${results.fail}<br>`;
 
@@ -1552,29 +1575,30 @@ function displayResults(results, stageAttempts, numTrials) {
         { stage: 5, cost: 150000, material: '조각', quantity: 10 },
         { stage: 6, cost: 300000, material: '결정', quantity: 10 },
         { stage: 7, cost: 500000, material: '결정', quantity: 10 },
-        { stage: 8, cost: 700000, material: '가지, 혼, 보물', quantity: 1 },
-        { stage: 9, cost: 1000000, material: '가지, 혼, 보물', quantity: 1 }
+        { stage: 8, cost: 700000, material: '보물', quantity: 1 },
+        { stage: 9, cost: 1000000, material: '보물', quantity: 1 }
     ];
 
+    const region = document.getElementById('regionSelect').value;
     let totalCost = 0;
     let totalMaterials = {};
 
     stageAttempts.forEach((attempts, index) => {
-        if (index > 0) { // 0번 인덱스는 사용하지 않음
+        if (index > 0) {
             const avgAttempts = attempts / numTrials;
             const costInfo = enhancementCosts.find(cost => cost.stage === index);
-            const avgCost = avgAttempts * costInfo.cost;
-            const totalMaterialUsed = avgAttempts * costInfo.quantity;
-            output += `단계 ${index} 평균 시도 횟수: ${avgAttempts.toFixed(2)}, 평균 소모비용: ${avgCost.toLocaleString()}원, 사용된 재료: ${costInfo.material} ${totalMaterialUsed.toFixed(2)}개<br>`;
+            if (costInfo) {
+                const updatedMaterial = updateMaterialNames(costInfo.material, region);
+                const avgCost = avgAttempts * costInfo.cost;
+                const totalMaterialUsed = avgAttempts * costInfo.quantity;
 
-            totalCost += avgCost;
-            if (totalMaterials[costInfo.material]) {
-                totalMaterials[costInfo.material] += totalMaterialUsed;
-            } else {
-                totalMaterials[costInfo.material] = totalMaterialUsed;
+                output += `단계 ${index} 평균 시도 횟수: ${avgAttempts.toFixed(2)}, 평균 소모비용: ${avgCost.toLocaleString()}원, 사용된 재료: ${updatedMaterial} ${totalMaterialUsed.toFixed(2)}개<br>`;
+                totalCost += avgCost;
+                totalMaterials[updatedMaterial] = (totalMaterials[updatedMaterial] || 0) + totalMaterialUsed;
             }
         }
     });
+
     function formatCurrency(amount) {
         if (amount >= 1000000000000) {
             return (amount / 1000000000000).toFixed(2) + '조원';
@@ -1585,7 +1609,7 @@ function displayResults(results, stageAttempts, numTrials) {
         } else {
             return amount + '원';
         }
-    }    
+    }
     output += `<br>(평균값) 총 소모 비용: ${formatCurrency(totalCost)}<br>`;
     Object.keys(totalMaterials).forEach(material => {
         output += `(평균값) 총 사용된 ${material}: ${Math.round(totalMaterials[material])}개<br>`;
@@ -1593,3 +1617,4 @@ function displayResults(results, stageAttempts, numTrials) {
 
     document.getElementById('resultsDisplay').innerHTML = output;
 }
+
