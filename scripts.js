@@ -1618,3 +1618,123 @@ function displayResults(results, stageAttempts, numTrials) {
     document.getElementById('resultsDisplay').innerHTML = output;
 }
 
+const grindingData = [
+    { level: 1, grindingStones: 1, money: 2000 },
+    { level: 2, grindingStones: 1, money: 2000 },
+    { level: 3, grindingStones: 1, money: 3000 },
+    { level: 4, grindingStones: 1, money: 4000 },
+    { level: 5, grindingStones: 2, money: 11000 },
+    { level: 6, grindingStones: 2, money: 13000 },
+    { level: 7, grindingStones: 2, money: 15000 },
+    { level: 8, grindingStones: 2, money: 17000 },
+    { level: 9, grindingStones: 2, money: 19000 },
+    { level: 10, grindingStones: 2, money: 21000 },
+    { level: 11, grindingStones: 2, money: 23000 },
+    { level: 12, grindingStones: 2, money: 25000 },
+    { level: 13, grindingStones: 2, money: 27000 },
+    { level: 14, grindingStones: 2, money: 29000 },
+    { level: 15, grindingStones: 2, money: 31000 },
+    { level: 16, grindingStones: 2, money: 33000 },
+    { level: 17, grindingStones: 2, money: 35000 },
+    { level: 18, grindingStones: 2, money: 37000 },
+    { level: 19, grindingStones: 3, money: 59000 },
+    { level: 20, grindingStones: 3, money: 62000 },
+    { level: 21, grindingStones: 3, money: 65000 },
+    { level: 22, grindingStones: 3, money: 68000 },
+    { level: 23, grindingStones: 3, money: 71000 },
+    { level: 24, grindingStones: 3, money: 74000 },
+    { level: 25, grindingStones: 3, money: 77000 },
+    { level: 26, grindingStones: 3, money: 80000 },
+    { level: 27, grindingStones: 3, money: 83000 },
+    { level: 28, grindingStones: 3, money: 86000 },
+    { level: 29, grindingStones: 4, money: 118000 },
+    { level: 30, grindingStones: 4, money: 122000 },
+    { level: 31, grindingStones: 4, money: 126000 },
+    { level: 32, grindingStones: 4, money: 130000 },
+    { level: 33, grindingStones: 4, money: 134000 },
+    { level: 34, grindingStones: 4, money: 138000 },
+    { level: 35, grindingStones: 4, money: 142000 },
+    { level: 36, grindingStones: 4, money: 146000 },
+    { level: 37, grindingStones: 5, money: 188000 },
+    { level: 38, grindingStones: 5, money: 193000 },
+    { level: 39, grindingStones: 5, money: 198000 },
+    { level: 40, grindingStones: 5, money: 203000 },
+    { level: 41, grindingStones: 5, money: 207000 },
+    { level: 42, grindingStones: 6, money: 255000 },
+    { level: 43, grindingStones: 6, money: 261000 },
+    { level: 44, grindingStones: 6, money: 267000 },
+    { level: 45, grindingStones: 6, money: 273000 },
+    { level: 46, grindingStones: 6, money: 279000 },
+    { level: 47, grindingStones: 7, money: 332000 },
+    { level: 48, grindingStones: 7, money: 339000 },
+    { level: 49, grindingStones: 7, money: 346000 },
+    { level: 50, grindingStones: 7, money: 353000 },
+    { level: 51, grindingStones: 8, money: 411000 },
+    { level: 52, grindingStones: 8, money: 419000 },
+    { level: 53, grindingStones: 8, money: 427000 },
+    { level: 54, grindingStones: 9, money: 490000 },
+    { level: 55, grindingStones: 9, money: 499000 },
+    { level: 56, grindingStones: 9, money: 508000 },
+    { level: 57, grindingStones: 10, money: 574000 },
+    { level: 58, grindingStones: 10, money: 584000 },
+    { level: 59, grindingStones: 10, money: 594000 },
+    { level: 60, grindingStones: 11, money: 664000 },
+    { level: 61, grindingStones: 11, money: 675000 },
+    { level: 62, grindingStones: 12, money: 748000 },
+    { level: 63, grindingStones: 12, money: 760000 },
+    { level: 64, grindingStones: 12, money: 772000 },
+    { level: 65, grindingStones: 13, money: 849000 },
+    { level: 66, grindingStones: 13, money: 862000 },
+    { level: 67, grindingStones: 14, money: 942000 },
+    { level: 68, grindingStones: 14, money: 956000 },
+    { level: 69, grindingStones: 15, money: 1039000 },
+    { level: 70, grindingStones: 16, money: 1124000 },
+    { level: 71, grindingStones: 16, money: 1140000 },
+    { level: 72, grindingStones: 17, money: 1228000 },
+    { level: 73, grindingStones: 17, money: 1245000 },
+    { level: 74, grindingStones: 18, money: 1336000 },
+    { level: 75, grindingStones: 19, money: 1429000 },
+    { level: 76, grindingStones: 20, money: 1524000 },
+    { level: 77, grindingStones: 20, money: 1544000 },
+    { level: 78, grindingStones: 21, money: 1642000 },
+    { level: 79, grindingStones: 22, money: 1742000 },
+    { level: 80, grindingStones: 23, money: 1844000 },
+    { level: 81, grindingStones: 24, money: 1948000 },
+    { level: 82, grindingStones: 25, money: 2054000 },
+    { level: 83, grindingStones: 26, money: 2162000 },
+    { level: 84, grindingStones: 27, money: 2272000 },
+    { level: 85, grindingStones: 29, money: 2469000 },
+    { level: 86, grindingStones: 30, money: 2584000 },
+    { level: 87, grindingStones: 32, money: 2788000 },
+    { level: 88, grindingStones: 33, money: 2908000 },
+    { level: 89, grindingStones: 35, money: 3118000 },
+    { level: 90, grindingStones: 37, money: 3333000 }
+];
+
+
+function calculateResources(startLevel, targetLevel) {
+    const relevantData = grindingData.filter(data => data.level >= startLevel && data.level <= targetLevel);
+    const totalStones = relevantData.reduce((total, current) => total + current.stones, 0);
+    const totalMoney = relevantData.reduce((total, current) => total + current.money, 0);
+
+    return { totalStones, totalMoney };
+}
+
+document.getElementById('calculator-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const startLevel = parseInt(document.getElementById('startLevel').value, 10);
+    const targetLevel = parseInt(document.getElementById('targetLevel').value, 10);
+
+    if (startLevel >= 1 && startLevel <= 90 && targetLevel >= 1 && targetLevel <= 90 && startLevel < targetLevel) {
+        const { totalStones, totalMoney } = calculateResources(startLevel, targetLevel);
+        document.getElementById('result').innerHTML = `
+            <p>총 연마석 개수: ${totalStones}</p>
+            <p>총 금액: ${totalMoney}</p>
+        `;
+    } else {
+        document.getElementById('result').innerHTML = `
+            <p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 함).</p>
+        `;
+    }
+});
