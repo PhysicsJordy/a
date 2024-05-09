@@ -1714,8 +1714,8 @@ const grindingData = [
 
 
 function calculateResources(startLevel, targetLevel) {
-    // 시작 및 목표 레벨 사이의 데이터 필터링
-    const relevantData = grindingData.filter(data => data.level >= startLevel && data.level <= targetLevel);
+    // 시작 레벨 0이면 1 레벨부터 필터링
+    const relevantData = grindingData.filter(data => data.level > startLevel && data.level <= targetLevel);
 
     // 총 연마석과 금액 계산
     const totalStones = relevantData.reduce((total, current) => total + current.stones, 0);
@@ -1731,7 +1731,7 @@ document.getElementById('calculator-form').addEventListener('submit', function (
     const startLevel = parseInt(document.getElementById('startLevel').value, 10) || 0;
     const targetLevel = parseInt(document.getElementById('targetLevel').value, 10) || 0;
 
-    if (startLevel >= 1 && startLevel <= 90 && targetLevel >= 1 && targetLevel <= 90 && startLevel < targetLevel) {
+    if (startLevel >= 0 && startLevel <= 90 && targetLevel >= 1 && targetLevel <= 90 && startLevel < targetLevel) {
         const { totalStones, totalMoney } = calculateResources(startLevel, targetLevel);
         document.getElementById('result').innerHTML = `
             <p>총 연마석 개수: ${totalStones}</p>
