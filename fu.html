@@ -11,6 +11,7 @@
         <button class="tablinks" onclick="openSection(event, 'EnhancementMaterialSim')">강화 재료 시뮬레이션</button>
         <button class="tablinks" onclick="openSection(event, 'CraftingMaterialSim')">제작 재료 시뮬레이션</button>
         <button class="tablinks" onclick="openSection(event, 'EnhancementSim')">강화 시뮬레이션</button>
+        <button class="tablinks" onclick="openSection(event, 'GrindingCalculator')">Grinding Calculator</button>
     </div>
 
     <div id="EnhancementMaterialSim" class="tabcontent">
@@ -54,37 +55,51 @@
         <label for="stageSelect">create by 죠링이@연</label>
         <div id="craftingSelectionResults"></div>
     </div>
-    <script src="scripts.js"></script>
 
+    <div id="EnhancementSim" class="tabcontent">
+        <h1>강화 시뮬레이터</h1>
+        <select id="regionSelect">
+            <option value="일본">일본</option>
+            <option value="중국">중국</option>
+            <option value="타계">타계</option>
+            <option value="환웅">환웅</option>
+            <option value="용">용</option>
+        </select>
+        <select id="partTypeSelect">
+            <option value="무기">무기</option>
+            <option value="갑옷">갑옷</option>
+            <option value="투구">투구</option>
+            <option value="망토">망토</option>
+            <option value="방패">방패</option>
+            <option value="손">손</option>
+            <option value="흑광">흑광</option>
+            <option value="용안불꽃">용안불꽃</option>
+            <option value="얼굴장식">얼굴장식</option>
+            <option value="신발">신발</option>
+            <option value="목걸이">목걸이</option>
+        </select>
+        <input type="number" id="currentStage" placeholder="현재 강화 수">
+        <input type="number" id="targetStage" placeholder="목표 강화 수">
+        <input type="number" id="numTrials" placeholder="최대 제작 개수">
+        <button onclick="enhanceSimulator()">시뮬레이션 실행</button>
+        <label for="stageSelect">create by 죠링이@연</label>
+        <div id="resultsDisplay"></div>
+    </div>
+
+    <div id="GrindingCalculator" class="tabcontent">
+        <h1>연마 계산기</h1>
+        <form id="calculator-form">
+            <label for="startLevel">시작 레벨:</label>
+            <input type="number" id="startLevel" name="startLevel" min="1" max="90" required>
+            
+            <label for="targetLevel">목표 레벨:</label>
+            <input type="number" id="targetLevel" name="targetLevel" min="1" max="90" required>
+
+            <button type="submit">계산하기</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
-
-<div id="EnhancementSim" class="tabcontent">
-    <h1>강화 시뮬레이터</h1>
-    <select id="regionSelect">
-        <option value="일본">일본</option>
-        <option value="중국">중국</option>
-        <option value="타계">타계</option>
-        <option value="환웅">환웅</option>
-        <option value="용">용</option>   
-    </select>
-    <select id="partTypeSelect">
-        <option value="무기">무기</option>
-        <option value="갑옷">갑옷</option>
-        <option value="투구">투구</option>
-        <option value="망토">망토</option>
-        <option value="방패">방패</option>
-        <option value="손">손</option>
-        <option value="흑광">흑광</option>
-        <option value="용안불꽃">용안불꽃</option>
-        <option value="얼굴장식">얼굴장식</option>
-        <option value="신발">신발</option>
-        <option value="목걸이">목걸이</option>
-    </select>
-    <input type="number" id="currentStage" placeholder="현재 강화 수">
-    <input type="number" id="targetStage" placeholder="목표 강화 수">
-    <input type="number" id="numTrials" placeholder="최대 제작 개수">
-    <button onclick="enhanceSimulator()">시뮬레이션 실행</button>
-    <label for="stageSelect">create by 죠링이@연</label>
-    <div id="resultsDisplay"></div>
-</div>
