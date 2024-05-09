@@ -1619,6 +1619,7 @@ function displayResults(results, stageAttempts, numTrials) {
 }
 
 const grindingData = [
+    { level: 0, stones: 0, money: 0 },
     { level: 1, stones: 1, money: 2000 },
     { level: 2, stones: 1, money: 2000 },
     { level: 3, stones: 1, money: 3000 },
