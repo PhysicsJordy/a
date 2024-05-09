@@ -1724,6 +1724,10 @@ function calculateResources(startLevel, targetLevel) {
     return { totalStones, totalMoney };
 }
 
+function formatNumber(number) {
+    return number.toLocaleString('ko-KR'); // 한국어(대한민국) 포맷
+}
+
 document.getElementById('calculator-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -1735,7 +1739,7 @@ document.getElementById('calculator-form').addEventListener('submit', function (
         const { totalStones, totalMoney } = calculateResources(startLevel, targetLevel);
         document.getElementById('result').innerHTML = `
             <p>총 연마석 개수: ${totalStones}</p>
-            <p>총 금액: ${totalMoney}</p>
+            <p>총 금액: ${formatNumber(totalMoney)}</p>
         `;
     } else {
         document.getElementById('result').innerHTML = `
