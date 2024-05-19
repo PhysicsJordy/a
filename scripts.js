@@ -1,4 +1,4 @@
-const DitemData = [
+  const DitemData = [
   [1,"[중국] 겁화의파편(거래불가)",0.81],
   [1,"[중국] 겁화의파편(거래가능)",0.09],
   [1,"[중국] 겁화의조각(거래불가)",0.09],
@@ -1760,11 +1760,15 @@ document.getElementById('calculator-form').addEventListener('submit', function (
         const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
 
         document.getElementById('result').innerHTML = `
-            <p>총 연마석 개수: ${totalStones}</p>
-            <p>총 금액 (포함 돌파 비용): ${formatNumber(totalMoneyIncludingBreakthrough)}</p>
-            <p>필요한 돌파 재료: ${materials.join(', ')}</p>
-            <p>기본 금액: ${formatNumber(totalMoney)}</p>
-            <p>추가 금액 (돌파): ${formatNumber(additionalMoney)}</p>
+            <p>필요한 연마석 개수: ${totalStones}</p>
+            <p>연마에만 필요한 금액: ${formatNumber(totalMoney)}</p>
+            <p>돌파에만 필요한 금액: ${formatNumber(additionalMoney)}</p>
+            <p>총 금액 (돌파+연마): ${formatNumber(totalMoneyIncludingBreakthrough)}</p>
+            <p>필요한 돌파 재료:</p>
+              <ul>${materials.map(mat => {
+              const parts = mat.split(' x ');
+              return `<li>${parts[1]} X ${parts[0]}개</li>`;
+            }).join('')}</ul>
         `;
     } else {
         document.getElementById('result').innerHTML = `
