@@ -1760,10 +1760,7 @@ document.getElementById('calculator-form').addEventListener('submit', function (
         const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
 
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('calculator-form');
-    const resultDisplay = document.getElementById('result');
-
-    form.addEventListener('submit', function(event) {
+    document.getElementById('calculator-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
         const startLevel = parseInt(document.getElementById('startLevel').value, 10) || 0;
@@ -1774,7 +1771,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const { materials, additionalMoney } = calculateBreakthroughResources(startLevel, targetLevel);
             const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
 
-            resultDisplay.innerHTML = `
+            document.getElementById('result').innerHTML = `
                 <p>필요한 연마석 개수: ${totalStones}</p>
                 <p>연마에만 필요한 금액: ${formatNumber(totalMoney)}</p>
                 <p>돌파에만 필요한 금액: ${formatNumber(additionalMoney)}</p>
@@ -1783,7 +1780,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <ul>${materials.map(mat => `<li>${mat}</li>`).join('')}</ul>
             `;
         } else {
-            resultDisplay.innerHTML = '<p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 합니다.).</p>';
+            document.getElementById('result').innerHTML = '<p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 합니다.).</p>';
         }
     });
 });
