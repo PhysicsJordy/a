@@ -1709,16 +1709,7 @@ const grindingData = [
     { level: 87, stones: 32, money: 2788000 },
     { level: 88, stones: 33, money: 2908000 },
     { level: 89, stones: 35, money: 3118000 },
-    { level: 90, stones: 38, money: 3461000 },
-    { level: 91, stones: 40, money: 3683000 },
-    { level: 92, stones: 42, money: 3908000 },
-    { level: 93, stones: 44, money: 4138000 },
-    { level: 94, stones: 47, money: 4467000 },
-    { level: 95, stones: 49, money: 4705000 },
-    { level: 96, stones: 51, money: 4948000 },
-    { level: 97, stones: 54, money: 5293000 },
-    { level: 98, stones: 56, money: 5544000 },
-    { level: 99, stones: 59, money: 5900000 },
+    { level: 90, stones: 37, money: 3333000 },
 ];
 
 const breakthroughData = [
