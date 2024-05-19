@@ -1759,19 +1759,25 @@ document.getElementById('calculator-form').addEventListener('submit', function (
         const { materials, additionalMoney } = calculateBreakthroughResources(startLevel, targetLevel);
         const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
 
-document.getElementById('result').innerHTML = `
-    <p>필요한 연마석 개수: ${totalStones}</p>
-    <p>연마에만 필요한 금액: ${formatNumber(totalMoney)}</p>
-    <p>돌파에만 필요한 금액: ${formatNumber(additionalMoney)}</p>
-    <p>총 금액 (돌파+연마): ${formatNumber(totalMoneyIncludingBreakthrough)}</p>
-    <p>필요한 돌파 재료:</p>
-    <ul>${materials.map(mat => {
-        const parts = mat.split(' X ');
-        return `<li>${parts[1]}</li>`; // 재료명만 추출
-    }).join('')}</ul>
-`;
+document.getElementById('calculator-form').addEventListener('submit', function (event) {
+    event.preventDefault();
 
+    const startLevel = parseInt(document.getElementById('startLevel').value, 10) || 0;
+    const targetLevel = parseInt(document.getElementById('targetLevel').value, 10) || 0;
 
+    if (startLevel >= 0 && startLevel <= 90 && targetLevel >= 1 && targetLevel <= 90 && startLevel < targetLevel) {
+        const { totalStones, totalMoney } = calculateResources(startLevel, targetLevel);
+        const { materials, additionalMoney } = calculateBreakthroughResources(startLevel, targetLevel);
+        const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
+
+        document.getElementById('result').innerHTML = `
+            <p>필요한 연마석 개수: ${totalStones}</p>
+            <p>연마에만 필요한 금액: ${formatNumber(totalMoney)}</p>
+            <p>돌파에만 필요한 금액: ${formatNumber(additionalMoney)}</p>
+            <p>총 금액 (돌파+연마): ${formatNumber(totalMoneyIncludingBreakthrough)}</p>
+            <p>필요한 돌파 재료:</p>
+            <ul>${materials.map(mat => `<li>${mat}</li>`).join('')}</ul>
+        `;
     } else {
         document.getElementById('result').innerHTML = `
             <p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 합니다.).</p>
