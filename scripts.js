@@ -1709,7 +1709,16 @@ const grindingData = [
     { level: 87, stones: 32, money: 2788000 },
     { level: 88, stones: 33, money: 2908000 },
     { level: 89, stones: 35, money: 3118000 },
-    { level: 90, stones: 37, money: 3333000 }
+    { level: 90, stones: 38, money: 3461000 },
+    { level: 91, stones: 40, money: 3683000 },
+    { level: 92, stones: 42, money: 3908000 },
+    { level: 93, stones: 44, money: 4138000 },
+    { level: 94, stones: 47, money: 4467000 },
+    { level: 95, stones: 49, money: 4705000 },
+    { level: 96, stones: 51, money: 4948000 },
+    { level: 97, stones: 54, money: 5293000 },
+    { level: 98, stones: 56, money: 5544000 },
+    { level: 99, stones: 59, money: 5900000 },
 ];
 
 const breakthroughData = [
@@ -1726,8 +1735,10 @@ const breakthroughData = [
     { level: 60, materials: '7성재료', materialsCount: 1, additionalMoney: 5000000 },
     { level: 65, materials: '7성재료', materialsCount: 1, additionalMoney: 5000000 },
     { level: 70, materials: '8성재료', materialsCount: 1, additionalMoney: 10000000 },
-    { level: 80, materials: '9성재료', materialsCount: 1, additionalMoney: 50000000 }
+    { level: 80, materials: '9성재료', materialsCount: 1, additionalMoney: 20000000 },
+    { level: 90, materials: '10성재료', materialsCount: 1, additionalMoney: 50000000 },
 ];
+
 function calculateResources(startLevel, targetLevel) {
     const relevantData = grindingData.filter(data => data.level > startLevel && data.level <= targetLevel);
     const totalStones = relevantData.reduce((total, current) => total + current.stones, 0);
@@ -1736,8 +1747,10 @@ function calculateResources(startLevel, targetLevel) {
 }
 
 function calculateBreakthroughResources(startLevel, targetLevel) {
-    const relevantBreakthroughs = breakthroughData.filter(breakthrough => breakthrough.level > startLevel && breakthrough.level <= targetLevel);
-    return relevantBreakthroughs.reduce((acc, current) => {
+    const relevantBreakthroughs = breakthroughData.filter(breakthrough => breakthrough.level > startLevel && breakthrough.level < targetLevel);
+
+  
+  return relevantBreakthroughs.reduce((acc, current) => {
         acc.materials.push(`${current.materialsCount} x ${current.materials}`);
         acc.additionalMoney += current.additionalMoney;
         return acc;
@@ -1754,34 +1767,26 @@ document.getElementById('calculator-form').addEventListener('submit', function (
     const startLevel = parseInt(document.getElementById('startLevel').value, 10) || 0;
     const targetLevel = parseInt(document.getElementById('targetLevel').value, 10) || 0;
 
-    if (startLevel >= 0 && startLevel <= 90 && targetLevel >= 1 && targetLevel <= 90 && startLevel < targetLevel) {
+    if (startLevel >= 0 && startLevel <= 100 && targetLevel >= 1 && targetLevel <= 100 && startLevel < targetLevel) {
         const { totalStones, totalMoney } = calculateResources(startLevel, targetLevel);
         const { materials, additionalMoney } = calculateBreakthroughResources(startLevel, targetLevel);
         const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('calculator-form').addEventListener('submit', function(event) {
-        event.preventDefault();
+document.getElementById('result').innerHTML = `
+    <p>필요한 연마석 개수: ${totalStones}</p>
+    <p>연마에만 필요한 금액: ${formatNumber(totalMoney)}</p>
+    <p>돌파에만 필요한 금액: ${formatNumber(additionalMoney)}</p>
+    <p>총 금액 (돌파+연마): ${formatNumber(totalMoneyIncludingBreakthrough)}</p>
+    <p>필요한 돌파 재료:</p>
+    <ul>${materials.map(mat => {
+        const parts = mat.split(' x ');
+        return `<li>${parts[1]}</li>`; // 재료명만 추출
+    }).join('')}</ul>
+`;
 
-        const startLevel = parseInt(document.getElementById('startLevel').value, 10) || 0;
-        const targetLevel = parseInt(document.getElementById('targetLevel').value, 10) || 0;
-
-        if (startLevel >= 0 && startLevel <= 90 && targetLevel >= 1 && targetLevel <= 90 && startLevel < targetLevel) {
-            const { totalStones, totalMoney } = calculateResources(startLevel, targetLevel);
-            const { materials, additionalMoney } = calculateBreakthroughResources(startLevel, targetLevel);
-            const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
-
-            document.getElementById('result').innerHTML = `
-                <p>필요한 연마석 개수: ${totalStones}</p>
-                <p>연마에만 필요한 금액: ${formatNumber(totalMoney)}</p>
-                <p>돌파에만 필요한 금액: ${formatNumber(additionalMoney)}</p>
-                <p>총 금액 (돌파+연마): ${formatNumber(totalMoneyIncludingBreakthrough)}</p>
-                <p>필요한 돌파 재료:</p>
-                <ul>${materials.map(mat => `<li>${mat}</li>`).join('')}</ul>
-            `;
-        } else {
-            document.getElementById('result').innerHTML = '<p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 합니다.).</p>';
-        }
-    });
+    } else {
+        document.getElementById('result').innerHTML = `
+            <p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 합니다.).</p>
+        `;
+    }
 });
-
