@@ -1713,20 +1713,20 @@ const grindingData = [
 ];
 
 const breakthroughData = [
-    { level: 10, materials: '2성재료', materialsCount: 2, additionalMoney: 100000 },
-    { level: 15, materials: '2성재료', materialsCount: 2, additionalMoney: 100000 },
-    { level: 20, materials: '3성재료', materialsCount: 3, additionalMoney: 200000 },
-    { level: 25, materials: '3성재료', materialsCount: 3, additionalMoney: 200000 },
-    { level: 30, materials: '4성재료', materialsCount: 4, additionalMoney: 500000 },
-    { level: 35, materials: '4성재료', materialsCount: 4, additionalMoney: 500000 },
-    { level: 40, materials: '5성재료', materialsCount: 5, additionalMoney: 1000000 },
-    { level: 45, materials: '5성재료', materialsCount: 5, additionalMoney: 1000000 },
-    { level: 50, materials: '6성재료', materialsCount: 6, additionalMoney: 2000000 },
-    { level: 55, materials: '6성재료', materialsCount: 6, additionalMoney: 2000000 },
-    { level: 60, materials: '7성재료', materialsCount: 7, additionalMoney: 5000000 },
-    { level: 65, materials: '7성재료', materialsCount: 7, additionalMoney: 5000000 },
-    { level: 70, materials: '8성재료', materialsCount: 8, additionalMoney: 10000000 },
-    { level: 80, materials: '9성재료', materialsCount: 9, additionalMoney: 50000000 }
+    { level: 10, materials: '2성재료', materialsCount: 1, additionalMoney: 100000 },
+    { level: 15, materials: '2성재료', materialsCount: 1, additionalMoney: 100000 },
+    { level: 20, materials: '3성재료', materialsCount: 1, additionalMoney: 200000 },
+    { level: 25, materials: '3성재료', materialsCount: 1, additionalMoney: 200000 },
+    { level: 30, materials: '4성재료', materialsCount: 1, additionalMoney: 500000 },
+    { level: 35, materials: '4성재료', materialsCount: 1, additionalMoney: 500000 },
+    { level: 40, materials: '5성재료', materialsCount: 1, additionalMoney: 1000000 },
+    { level: 45, materials: '5성재료', materialsCount: 1, additionalMoney: 1000000 },
+    { level: 50, materials: '6성재료', materialsCount: 1, additionalMoney: 2000000 },
+    { level: 55, materials: '6성재료', materialsCount: 1, additionalMoney: 2000000 },
+    { level: 60, materials: '7성재료', materialsCount: 1, additionalMoney: 5000000 },
+    { level: 65, materials: '7성재료', materialsCount: 1, additionalMoney: 5000000 },
+    { level: 70, materials: '8성재료', materialsCount: 1, additionalMoney: 10000000 },
+    { level: 80, materials: '9성재료', materialsCount: 1, additionalMoney: 50000000 }
 ];
 function calculateResources(startLevel, targetLevel) {
     const relevantData = grindingData.filter(data => data.level > startLevel && data.level <= targetLevel);
