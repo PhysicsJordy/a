@@ -1402,9 +1402,38 @@ function randomSelectAndSort() {
     evt.currentTarget.className += " active";
 }
 
-window.onload = function() {
-    document.getElementsByClassName("tablinks")[0].click();
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementsByClassName("tablinks")[0].click(); // 첫 번째 탭 활성화
+    updatePartTypeOptions(); // 초기 장비 종류 설정
+    document.getElementById('regionSelect').addEventListener('change', updatePartTypeOptions); // 지역 선택 변경에 따른 이벤트 리스너 추가
+});
+
+function updatePartTypeOptions() {
+    const regionSelect = document.getElementById('regionSelect');
+    const partTypeSelect = document.getElementById('partTypeSelect');
+    const region = regionSelect.value;
+    const partTypes = getPartTypesByRegion(region);
+
+    partTypeSelect.innerHTML = ''; // 기존 옵션 초기화
+    partTypes.forEach(partType => {
+        let option = document.createElement('option');
+        option.value = partType;
+        option.textContent = partType;
+        partTypeSelect.appendChild(option);
+    });
 }
+
+function getPartTypesByRegion(region) {
+    const partTypes = {
+        "중국": ["무기", "갑옷", "투구", "망토", "손", "방패"],
+        "일본": ["무기", "갑옷", "투구", "망토", "손", "방패"],
+        "환웅": ["무기", "갑옷", "투구", "손"],
+        "타계": ["무기", "갑옷", "투구", "망토", "손", "얼굴장식", "신발", "목걸이", "방패"],
+        "용": ["무기", "갑옷", "투구", "망토", "흑광", "용안불꽃"]
+    };
+    return partTypes[region] || [];
+}
+
 
 function craftingRandomSelectAndSort() {
     const stage = document.getElementById('craftingStageSelect').value;
