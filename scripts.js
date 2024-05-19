@@ -1767,9 +1767,10 @@ document.getElementById('result').innerHTML = `
     <p>필요한 돌파 재료:</p>
     <ul>${materials.map(mat => {
         const parts = mat.split(' X ');
-        return `<li>${parts[0]}</li>`;
+        return `<li>${parts[1]}</li>`; // 재료명만 추출
     }).join('')}</ul>
 `;
+
 
     } else {
         document.getElementById('result').innerHTML = `
