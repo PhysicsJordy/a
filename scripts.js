@@ -1767,7 +1767,7 @@ document.getElementById('calculator-form').addEventListener('submit', function (
             <p>필요한 돌파 재료:</p>
               <ul>${materials.map(mat => {
               const parts = mat.split(' x ');
-              return `<li>${parts[1]} X ${parts[0]}개</li>`;
+              return `<li>${parts[1]}
             }).join('')}</ul>
         `;
     } else {
