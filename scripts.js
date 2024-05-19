@@ -1712,16 +1712,36 @@ const grindingData = [
     { level: 90, stones: 37, money: 3333000 }
 ];
 
-
+const breakthroughData = [
+    { level: 10, materials: '2성재료', materialsCount: 2, additionalMoney: 100000 },
+    { level: 15, materials: '2성재료', materialsCount: 2, additionalMoney: 100000 },
+    { level: 20, materials: '3성재료', materialsCount: 3, additionalMoney: 200000 },
+    { level: 25, materials: '3성재료', materialsCount: 3, additionalMoney: 200000 },
+    { level: 30, materials: '4성재료', materialsCount: 4, additionalMoney: 500000 },
+    { level: 35, materials: '4성재료', materialsCount: 4, additionalMoney: 500000 },
+    { level: 40, materials: '5성재료', materialsCount: 5, additionalMoney: 1000000 },
+    { level: 45, materials: '5성재료', materialsCount: 5, additionalMoney: 1000000 },
+    { level: 50, materials: '6성재료', materialsCount: 6, additionalMoney: 2000000 },
+    { level: 55, materials: '6성재료', materialsCount: 6, additionalMoney: 2000000 },
+    { level: 60, materials: '7성재료', materialsCount: 7, additionalMoney: 5000000 },
+    { level: 65, materials: '7성재료', materialsCount: 7, additionalMoney: 5000000 },
+    { level: 70, materials: '8성재료', materialsCount: 8, additionalMoney: 10000000 },
+    { level: 80, materials: '9성재료', materialsCount: 9, additionalMoney: 50000000 }
+];
 function calculateResources(startLevel, targetLevel) {
-    // 시작 레벨 0이면 1 레벨부터 필터링
     const relevantData = grindingData.filter(data => data.level > startLevel && data.level <= targetLevel);
-
-    // 총 연마석과 금액 계산
     const totalStones = relevantData.reduce((total, current) => total + current.stones, 0);
     const totalMoney = relevantData.reduce((total, current) => total + current.money, 0);
-
     return { totalStones, totalMoney };
+}
+
+function calculateBreakthroughResources(startLevel, targetLevel) {
+    const relevantBreakthroughs = breakthroughData.filter(breakthrough => breakthrough.level > startLevel && breakthrough.level <= targetLevel);
+    return relevantBreakthroughs.reduce((acc, current) => {
+        acc.materials.push(`${current.materialsCount} x ${current.materials}`);
+        acc.additionalMoney += current.additionalMoney;
+        return acc;
+    }, { materials: [], additionalMoney: 0 });
 }
 
 function formatNumber(number) {
@@ -1731,34 +1751,24 @@ function formatNumber(number) {
 document.getElementById('calculator-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    // 숫자 변환 및 NaN 방지
     const startLevel = parseInt(document.getElementById('startLevel').value, 10) || 0;
     const targetLevel = parseInt(document.getElementById('targetLevel').value, 10) || 0;
 
     if (startLevel >= 0 && startLevel <= 90 && targetLevel >= 1 && targetLevel <= 90 && startLevel < targetLevel) {
         const { totalStones, totalMoney } = calculateResources(startLevel, targetLevel);
+        const { materials, additionalMoney } = calculateBreakthroughResources(startLevel, targetLevel);
+        const totalMoneyIncludingBreakthrough = totalMoney + additionalMoney;
+
         document.getElementById('result').innerHTML = `
             <p>총 연마석 개수: ${totalStones}</p>
-            <p>총 금액: ${formatNumber(totalMoney)}</p>
+            <p>총 금액 (포함 돌파 비용): ${formatNumber(totalMoneyIncludingBreakthrough)}</p>
+            <p>필요한 돌파 재료: ${materials.join(', ')}</p>
+            <p>기본 금액: ${formatNumber(totalMoney)}</p>
+            <p>추가 금액 (돌파): ${formatNumber(additionalMoney)}</p>
         `;
     } else {
         document.getElementById('result').innerHTML = `
-            <p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 함).</p>
+            <p>올바른 레벨 범위를 입력해주세요 (시작 레벨은 목표 레벨보다 낮아야 합니다.).</p>
         `;
     }
 });
-
-function openSection(evt, sectionName) {
-    const tabcontent = document.getElementsByClassName("tabcontent");
-    for (let i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    const tablinks = document.getElementsByClassName("tablinks");
-    for (let i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    document.getElementById(sectionName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
