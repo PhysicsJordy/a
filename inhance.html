@@ -1,27 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>강화 시뮬레이터</title>
-  <script>
-    // 현재 타임스탬프 생성
-    const timestamp = new Date().getTime();
-
-    // 동적으로 CSS 파일 로드
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = `inhance.css?v=${timestamp}`;
-    document.head.appendChild(link);
-
-    // JavaScript 파일 로드
-    const script = document.createElement("script");
-    script.src = `inhance.js?v=${timestamp}`;
-    document.head.appendChild(script);
-  </script>
+  <style>
+    /* 간단한 CSS 예시 */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    section {
+      background: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #results {
+      text-align: center;
+    }
+    #output p {
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
   <h1>강화 시뮬레이터</h1>
+  
   <section id="input">
     <label for="grade">장비 등급 선택:</label>
     <select id="grade">
@@ -56,5 +92,235 @@
     <h2>결과</h2>
     <div id="output"></div>
   </section>
+
+  <script>
+    // ---------------------------
+    // 1) JS 코드를 HTML 파일에 직접 삽입(테스트용)
+    // ---------------------------
+
+    // 옵션별 최대치 정의
+    const maxLimits = {
+      "마법치명": 70,
+      "방어구관통": 50,
+      "방어도무시": 12,
+      "공격력증가": 70,
+      "시전향상": 100,
+      "마력증강": 70,
+    };
+
+    // 초기 강화 확률 설정
+    const initialProbability = {
+      "신화": [
+        { prob: 0.1, range: [20, 30] },
+        { prob: 19.9, range: [15, 25] },
+        { prob: 40.0, range: [10, 15] },
+        { prob: 40.0, range: [5, 10] },
+      ],
+      "전설": [
+        { prob: 1.0, range: [20, 30] },
+        { prob: 19.0, range: [15, 25] },
+        { prob: 20.0, range: [10, 15] },
+        { prob: 60.0, range: [5, 10] },
+      ],
+      "영웅": [
+        { prob: 2.0, range: [15, 20] },
+        { prob: 18.0, range: [10, 15] },
+        { prob: 40.0, range: [5, 10] },
+        { prob: 40.0, range: [1, 5] },
+      ],
+      "희귀": [
+        { prob: 5.0, range: [10, 15] },
+        { prob: 20.0, range: [5, 10] },
+        { prob: 35.0, range: [3, 5] },
+        { prob: 40.0, range: [1, 3] },
+      ],
+      "고급": [
+        { prob: 10.0, range: [8, 12] },
+        { prob: 20.0, range: [5, 8] },
+        { prob: 30.0, range: [2, 5] },
+        { prob: 40.0, range: [1, 2] },
+      ],
+      "일반": [
+        { prob: 10.0, range: [5, 7] },
+        { prob: 20.0, range: [3, 5] },
+        { prob: 30.0, range: [2, 3] },
+        { prob: 40.0, range: [1, 2] },
+      ],
+    };
+
+    // 강화 비용 설정
+    const enhancementCosts = {
+      "신화": { stone: 15, gold: 800000 },
+      "전설": { stone: 15, gold: 500000 },
+      "영웅": { stone: 15, gold: 300000 },
+      "희귀": { stone: 15, gold: 100000 },
+      "고급": { stone: 15, gold: 50000 },
+      "일반": { stone: 15, gold: 10000 },
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("DOM 로드 완료");
+
+      document.getElementById("start-simulation").addEventListener("click", async () => {
+        console.log("시뮬레이션 시작 버튼 클릭됨");
+
+        const grade = document.getElementById("grade").value;
+        const option = document.getElementById("option").value;
+        const currentValue = parseInt(document.getElementById("current-value").value);
+        const targetPercentage = parseInt(document.getElementById("target-percentage").value);
+
+        console.log("선택된 등급:", grade);
+        console.log("선택된 옵션:", option);
+        console.log("현재 수치:", currentValue);
+        console.log("목표 비율:", targetPercentage);
+
+        if (isNaN(currentValue) || currentValue < 0) {
+          alert("현재 수치를 올바르게 입력해주세요.");
+          return;
+        }
+        if (isNaN(targetPercentage) || targetPercentage < 1 || targetPercentage > 100) {
+          alert("1차 강화 목표 비율을 1~100 사이로 입력해주세요.");
+          return;
+        }
+
+        const maxLimit = maxLimits[option];
+        if (typeof maxLimit === "undefined") {
+          alert("선택한 옵션에 대한 최대치가 존재하지 않습니다.");
+          return;
+        }
+        const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
+        const targetValue = Math.floor(finalLimit * (targetPercentage / 100));
+
+        console.log("옵션 최대치:", maxLimit);
+        console.log("최종 강화 가능 수치:", finalLimit);
+        console.log("1차 강화 목표 수치:", targetValue);
+
+        document.getElementById("output").innerHTML = "<p>시뮬레이션 실행 중...</p>";
+
+        try {
+          const results = await simulateEnhancements(10000, grade, maxLimit, currentValue, targetValue);
+
+          if (!results) {
+            throw new Error("시뮬레이션 결과가 없습니다.");
+          }
+
+          console.log("시뮬레이션 결과:", results);
+
+          document.getElementById("output").innerHTML = `
+            <p>평균 추가된 값: ${results.avgAddedValue}</p>
+            <p>1차 강화 평균 횟수: ${results.avg1stAttempts}</p>
+            <p>2차 강화 평균 횟수: ${results.avg2ndAttempts}</p>
+            <p>평균 소모 금전: ${results.avgGoldSpent.toLocaleString()} 전</p>
+            <p>평균 소모 강화석 갯수: ${results.avgStonesSpent}</p>
+          `;
+        } catch (error) {
+          console.error(error);
+          document.getElementById("output").innerHTML =
+            "<p>오류가 발생했습니다. 콘솔을 확인하고 다시 시도해주세요.</p>";
+        }
+      });
+    });
+
+    async function simulateEnhancements(iterations, grade, maxLimit, currentValue, targetValue) {
+      console.log("시뮬레이션 함수 실행 시작");
+
+      let totalAddedValue = 0;
+      let total1stAttempts = 0;
+      let total2ndAttempts = 0;
+      let totalGoldSpent = 0;
+      let totalStonesSpent = 0;
+
+      for (let i = 0; i < iterations; i++) {
+        // 1차 강화
+        let attempts1st = 0;
+        let addedValue1st = 0;
+
+        while (currentValue + addedValue1st < targetValue && attempts1st < 1000) {
+          const probData = initialProbability[grade];
+          if (!probData) {
+            throw new Error(`초기 확률 데이터가 없음: 등급=${grade}`);
+          }
+
+          const initialRange = getRandomRange(probData);
+          if (!initialRange) {
+            throw new Error("초기 확률 범위를 찾지 못했습니다.");
+          }
+
+          const enhancement = getRandomValue(initialRange);
+          addedValue1st += enhancement;
+          attempts1st++;
+
+          // 1차 강화 비용
+          totalGoldSpent += 10000;
+        }
+
+        total1stAttempts += attempts1st;
+
+        // 2차 강화
+        let enhancedValue = currentValue + addedValue1st;
+        let attempts2nd = 0;
+        let addedValue2nd = 0;
+        const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
+        const costData = enhancementCosts[grade];
+        if (!costData) {
+          throw new Error(`강화 비용 데이터가 없음: 등급=${grade}`);
+        }
+
+        while (enhancedValue < finalLimit && attempts2nd < 1000) {
+          const enhancementChance = getEnhancementChance(enhancedValue, maxLimit, finalLimit);
+          let additionalEnhancement = 0;
+          if (enhancementChance === "max") {
+            additionalEnhancement = getRandomValue([enhancedValue + 1, finalLimit]);
+          } else if (enhancementChance === "mid") {
+            const midMax = Math.floor((enhancedValue + finalLimit) / 2);
+            additionalEnhancement = getRandomValue([enhancedValue + 1, midMax]);
+          } else {
+            additionalEnhancement = 1;
+          }
+
+          enhancedValue += additionalEnhancement;
+          addedValue2nd += additionalEnhancement;
+
+          totalStonesSpent += costData.stone;
+          totalGoldSpent += costData.gold;
+          attempts2nd++;
+        }
+
+        total2ndAttempts += attempts2nd;
+        totalAddedValue += addedValue1st + addedValue2nd;
+      }
+
+      return {
+        avgAddedValue: Math.floor(totalAddedValue / iterations),
+        avg1stAttempts: Math.floor(total1stAttempts / iterations),
+        avg2ndAttempts: Math.floor(total2ndAttempts / iterations),
+        avgGoldSpent: Math.floor(totalGoldSpent / iterations),
+        avgStonesSpent: Math.floor(totalStonesSpent / iterations),
+      };
+    }
+
+    function getRandomRange(probabilities) {
+      const rand = Math.random() * 100;
+      let cumulative = 0;
+      for (const { prob, range } of probabilities) {
+        cumulative += prob;
+        if (rand <= cumulative) return range;
+      }
+      return null;
+    }
+
+    function getRandomValue(range) {
+      const min = range[0];
+      const max = range[1];
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getEnhancementChance(currentValue, maxLimit, finalLimit) {
+      const rand = Math.random() * 100;
+      if (rand <= 10) return "max";
+      if (rand <= 40) return "mid";
+      return "min";
+    }
+  </script>
 </body>
 </html>
