@@ -1,4 +1,3 @@
-<script src="inhance.js?v=1.0"></script>
 
 
 // 옵션별 최대치 정의
