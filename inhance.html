@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>장비 강화 시뮬레이터</title>
+  <title>강화 시뮬레이터</title>
   <link rel="stylesheet" href="inhance.css">
 </head>
 <body>
-  <h1>장비 강화 시뮬레이터</h1>
+  <h1>강화 시뮬레이터</h1>
   <section id="input">
     <label for="grade">장비 등급 선택:</label>
     <select id="grade">
-      <option value="일반~전설">일반~전설</option>
-      <option value="신화 이상">신화 이상</option>
+      <option value="신화">신화</option>
+      <option value="전설">전설</option>
+      <option value="영웅">영웅</option>
+      <option value="희귀">희귀</option>
+      <option value="고급">고급</option>
+      <option value="일반">일반</option>
     </select>
 
-    <label for="option">능력치 선택:</label>
+    <label for="option">옵션 종류:</label>
     <select id="option">
       <option value="마법치명">마법치명</option>
       <option value="방어구관통">방어구관통</option>
@@ -25,14 +29,14 @@
       <option value="마력증강">마력증강</option>
     </select>
 
-    <label for="value">현재 능력치 입력:</label>
-    <input type="number" id="value" min="0" placeholder="능력치 입력">
+    <label for="target-percentage">1차 강화 목표 비율 (1~100%):</label>
+    <input type="number" id="target-percentage" min="1" max="100" value="70">
 
-    <button id="start-simulation">강화 시작</button>
+    <button id="start-simulation">강화 시뮬레이션 시작</button>
   </section>
 
   <section id="results">
-    <h2>강화 결과</h2>
+    <h2>결과</h2>
     <div id="output"></div>
   </section>
 
