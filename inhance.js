@@ -1,3 +1,6 @@
+<script src="inhance.js?v=1.0"></script>
+
+
 // 옵션별 최대치 정의
 const maxLimits = {
   "마법치명": 70,
