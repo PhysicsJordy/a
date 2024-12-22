@@ -4,8 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>강화 시뮬레이터</title>
-  <!-- CSS 파일 로드 시 버전 추가 -->
-  <link rel="stylesheet" href="inhance.css?v=1.0">
+  <script>
+    // 현재 타임스탬프 생성
+    const timestamp = new Date().getTime();
+
+    // 동적으로 CSS 파일 로드
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = `inhance.css?v=${timestamp}`;
+    document.head.appendChild(link);
+
+    // JavaScript 파일 로드
+    const script = document.createElement("script");
+    script.src = `inhance.js?v=${timestamp}`;
+    document.head.appendChild(script);
+  </script>
 </head>
 <body>
   <h1>강화 시뮬레이터</h1>
@@ -43,4 +56,5 @@
     <h2>결과</h2>
     <div id="output"></div>
   </section>
-
+</body>
+</html>
