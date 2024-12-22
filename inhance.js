@@ -45,11 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentValue = parseInt(document.getElementById("current-value").value);
     const targetPercentage = parseInt(document.getElementById("target-percentage").value);
 
-    console.log("선택된 등급:", grade);
-    console.log("선택된 옵션:", option);
-    console.log("현재 수치:", currentValue);
-    console.log("목표 비율:", targetPercentage);
-
     if (isNaN(currentValue) || currentValue < 0) {
       alert("현재 수치를 올바르게 입력해주세요.");
       return;
@@ -69,17 +64,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("output").innerHTML = "<p>시뮬레이션 실행 중...</p>";
 
-    const results = await simulateEnhancements(10000, grade, maxLimit, currentValue, targetValue);
+    try {
+      const results = await simulateEnhancements(10000, grade, maxLimit, currentValue, targetValue);
+      if (!results) throw new Error("시뮬레이션 결과 생성 실패");
 
-    console.log("시뮬레이션 결과:", results);
+      console.log("시뮬레이션 결과:", results);
 
-    document.getElementById("output").innerHTML = `
-      <p>평균 추가된 값: ${results.avgAddedValue}</p>
-      <p>1차 강화 평균 횟수: ${results.avg1stAttempts}</p>
-      <p>2차 강화 평균 횟수: ${results.avg2ndAttempts}</p>
-      <p>평균 소모 금전: ${results.avgGoldSpent.toLocaleString()} 전</p>
-      <p>평균 소모 강화석 갯수: ${results.avgStonesSpent}</p>
-    `;
+      document.getElementById("output").innerHTML = `
+        <p>평균 추가된 값: ${results.avgAddedValue}</p>
+        <p>1차 강화 평균 횟수: ${results.avg1stAttempts}</p>
+        <p>2차 강화 평균 횟수: ${results.avg2ndAttempts}</p>
+        <p>평균 소모 금전: ${results.avgGoldSpent.toLocaleString()} 전</p>
+        <p>평균 소모 강화석 갯수: ${results.avgStonesSpent}</p>
+      `;
+    } catch (error) {
+      console.error(error);
+      document.getElementById("output").innerHTML = "<p>오류 발생: 시뮬레이션을 다시 실행해주세요.</p>";
+    }
   });
 });
 
@@ -93,41 +94,35 @@ async function simulateEnhancements(iterations, grade, maxLimit, currentValue, t
   let totalStonesSpent = 0;
 
   for (let i = 0; i < iterations; i++) {
-    console.log(`Iteration ${i + 1}: 현재 수치 = ${currentValue}, 목표 수치 = ${targetValue}`);
-
-    // 1차 강화
     let attempts1st = 0;
     let addedValue1st = 0;
 
-    while (currentValue + addedValue1st < targetValue) {
+    while (currentValue + addedValue1st < targetValue && attempts1st < 1000) {
       const initialRange = getRandomRange(initialProbability[grade]);
+      if (!initialRange) throw new Error("초기 확률 범위 오류");
       const enhancement = getRandomValue(initialRange);
-      console.log(`1차 강화 값 추가: ${enhancement}`);
 
       addedValue1st += enhancement;
       attempts1st++;
-      totalGoldSpent += 10000; // 초기화 비용
+      totalGoldSpent += 10000;
     }
 
-    console.log(`1차 강화 완료: 추가된 값 = ${addedValue1st}, 시도 횟수 = ${attempts1st}`);
     total1stAttempts += attempts1st;
 
-    // 2차 강화
     let enhancedValue = currentValue + addedValue1st;
     let attempts2nd = 0;
     let addedValue2nd = 0;
-    const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
     const costData = enhancementCosts[grade];
 
-    while (enhancedValue < finalLimit) {
+    while (enhancedValue < maxLimit + Math.floor(maxLimit * 0.3) && attempts2nd < 1000) {
       const enhancementChance = getEnhancementChance(enhancedValue, maxLimit, finalLimit);
-      const additionalEnhancement = enhancementChance === "max"
-        ? getRandomValue([enhancedValue + 1, finalLimit])
-        : enhancementChance === "mid"
-        ? getRandomValue([enhancedValue + 1, Math.floor((enhancedValue + finalLimit) / 2)])
-        : 1;
+      const additionalEnhancement =
+        enhancementChance === "max"
+          ? getRandomValue([enhancedValue + 1, finalLimit])
+          : enhancementChance === "mid"
+          ? getRandomValue([enhancedValue + 1, Math.floor((enhancedValue + finalLimit) / 2)])
+          : 1;
 
-      console.log(`2차 강화 값 추가: ${additionalEnhancement}`);
       enhancedValue += additionalEnhancement;
       addedValue2nd += additionalEnhancement;
       totalStonesSpent += costData.stone;
@@ -135,12 +130,9 @@ async function simulateEnhancements(iterations, grade, maxLimit, currentValue, t
       attempts2nd++;
     }
 
-    console.log(`2차 강화 완료: 추가된 값 = ${addedValue2nd}, 시도 횟수 = ${attempts2nd}`);
     total2ndAttempts += attempts2nd;
     totalAddedValue += addedValue1st + addedValue2nd;
   }
-
-  console.log("시뮬레이션 반복 완료");
 
   return {
     avgAddedValue: Math.floor(totalAddedValue / iterations),
@@ -159,6 +151,7 @@ function getRandomRange(probabilities) {
     cumulative += prob;
     if (rand <= cumulative) return range;
   }
+  return null;
 }
 
 function getRandomValue(range) {
