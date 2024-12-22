@@ -22,7 +22,6 @@ const initialProbability = {
     { prob: 20.0, range: [10, 15] },
     { prob: 60.0, range: [5, 10] },
   ],
-  // 다른 등급도 필요 시 추가
 };
 
 // 강화 비용 설정
@@ -37,16 +36,17 @@ const enhancementCosts = {
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("start-simulation").addEventListener("click", async () => {
-    console.log("시뮬레이션 시작 버튼 클릭됨"); // 디버깅용 로그
+    console.log("시뮬레이션 시작 버튼 클릭됨");
+
     const grade = document.getElementById("grade").value;
     const option = document.getElementById("option").value;
     const currentValue = parseInt(document.getElementById("current-value").value);
     const targetPercentage = parseInt(document.getElementById("target-percentage").value);
 
-    console.log("grade:", grade); // 등급 확인
-    console.log("option:", option); // 옵션 확인
-    console.log("currentValue:", currentValue); // 현재 수치 확인
-    console.log("targetPercentage:", targetPercentage); // 목표 비율 확인
+    console.log("선택된 등급:", grade);
+    console.log("선택된 옵션:", option);
+    console.log("현재 수치:", currentValue);
+    console.log("목표 비율:", targetPercentage);
 
     if (isNaN(currentValue) || currentValue < 0) {
       alert("현재 수치를 올바르게 입력해주세요.");
@@ -57,19 +57,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const maxLimit = maxLimits[option]; // maxLimits가 제대로 정의되어 있는지 확인
+    const maxLimit = maxLimits[option];
     const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
     const targetValue = Math.floor(finalLimit * (targetPercentage / 100));
 
-    console.log("maxLimit:", maxLimit); // 최대 한계 확인
-    console.log("finalLimit:", finalLimit); // 최종 한계 확인
-    console.log("targetValue:", targetValue); // 목표값 확인
+    console.log("옵션 최대치:", maxLimit);
+    console.log("최종 강화 가능 수치:", finalLimit);
+    console.log("1차 강화 목표 수치:", targetValue);
 
     document.getElementById("output").innerHTML = "<p>시뮬레이션 실행 중...</p>";
 
     const results = await simulateEnhancements(10000, grade, maxLimit, currentValue, targetValue);
 
-    console.log("시뮬레이션 결과:", results); // 결과 확인
+    console.log("시뮬레이션 결과:", results);
 
     document.getElementById("output").innerHTML = `
       <p>평균 추가된 값: ${results.avgAddedValue}</p>
@@ -89,17 +89,23 @@ async function simulateEnhancements(iterations, grade, maxLimit, currentValue, t
   let totalStonesSpent = 0;
 
   for (let i = 0; i < iterations; i++) {
+    console.log(`Iteration ${i + 1}: 현재 수치 = ${currentValue}, 목표 수치 = ${targetValue}`);
+
     // 1차 강화
     let attempts1st = 0;
     let addedValue1st = 0;
 
     while (currentValue + addedValue1st < targetValue) {
       const initialRange = getRandomRange(initialProbability[grade]);
-      addedValue1st = getRandomValue(initialRange);
+      const enhancement = getRandomValue(initialRange);
+      console.log(`1차 강화 값 추가: ${enhancement}`);
+
+      addedValue1st += enhancement;
       attempts1st++;
       totalGoldSpent += 10000; // 초기화 비용
     }
 
+    console.log(`1차 강화 완료: 추가된 값 = ${addedValue1st}, 시도 횟수 = ${attempts1st}`);
     total1stAttempts += attempts1st;
 
     // 2차 강화
@@ -117,6 +123,7 @@ async function simulateEnhancements(iterations, grade, maxLimit, currentValue, t
         ? getRandomValue([enhancedValue + 1, Math.floor((enhancedValue + finalLimit) / 2)])
         : 1;
 
+      console.log(`2차 강화 값 추가: ${additionalEnhancement}`);
       enhancedValue += additionalEnhancement;
       addedValue2nd += additionalEnhancement;
       totalStonesSpent += costData.stone;
@@ -124,6 +131,7 @@ async function simulateEnhancements(iterations, grade, maxLimit, currentValue, t
       attempts2nd++;
     }
 
+    console.log(`2차 강화 완료: 추가된 값 = ${addedValue2nd}, 시도 횟수 = ${attempts2nd}`);
     total2ndAttempts += attempts2nd;
     totalAddedValue += addedValue1st + addedValue2nd;
   }
