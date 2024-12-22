@@ -1,75 +1,23 @@
-// 옵션 최대치 설정
-const maxLimits = {
-  "마법치명": 70,
-  "방어구관통": 50,
-  "방어도무시": 12,
-  "공격력증가": 70,
-  "시전향상": 100,
-  "마력증강": 70,
-};
-
-// 초기 강화 확률 설정
-const initialProbability = {
-  "신화": [
-    { prob: 0.1, range: [20, 30] },
-    { prob: 19.9, range: [15, 25] },
-    { prob: 40.0, range: [10, 15] },
-    { prob: 40.0, range: [5, 10] },
-  ],
-  "전설": [
-    { prob: 1.0, range: [20, 30] },
-    { prob: 19.0, range: [15, 25] },
-    { prob: 20.0, range: [10, 15] },
-    { prob: 60.0, range: [5, 10] },
-  ],
-  "영웅": [
-    { prob: 1.0, range: [20, 30] },
-    { prob: 19.0, range: [15, 25] },
-    { prob: 20.0, range: [10, 15] },
-    { prob: 60.0, range: [5, 10] },
-  ],
-  "희귀": [
-    { prob: 1.0, range: [20, 30] },
-    { prob: 19.0, range: [15, 25] },
-    { prob: 20.0, range: [10, 15] },
-    { prob: 60.0, range: [5, 10] },
-  ],
-  "고급": [
-    { prob: 1.0, range: [20, 30] },
-    { prob: 19.0, range: [15, 25] },
-    { prob: 20.0, range: [10, 15] },
-    { prob: 60.0, range: [5, 10] },
-  ],
-  "일반": [
-    { prob: 1.0, range: [20, 30] },
-    { prob: 19.0, range: [15, 25] },
-    { prob: 20.0, range: [10, 15] },
-    { prob: 60.0, range: [5, 10] },
-  ],
-};
-
-// 강화 비용 설정
-const enhancementCosts = {
-  "신화": { stone: 15, gold: 800000 },
-  "전설": { stone: 15, gold: 500000 },
-  "영웅": { stone: 15, gold: 300000 },
-  "희귀": { stone: 15, gold: 100000 },
-  "고급": { stone: 15, gold: 50000 },
-  "일반": { stone: 15, gold: 10000 },
-};
-
 document.getElementById("start-simulation").addEventListener("click", () => {
   const grade = document.getElementById("grade").value;
   const option = document.getElementById("option").value;
+  const currentValue = parseInt(document.getElementById("current-value").value);
   const targetPercentage = parseInt(document.getElementById("target-percentage").value);
 
+  if (isNaN(currentValue) || currentValue < 0) {
+    alert("현재 수치를 올바르게 입력해주세요.");
+    return;
+  }
   if (isNaN(targetPercentage) || targetPercentage < 1 || targetPercentage > 100) {
-    alert("목표 비율을 1~100 사이로 입력해주세요.");
+    alert("1차 강화 목표 비율을 1~100 사이로 입력해주세요.");
     return;
   }
 
   const maxLimit = maxLimits[option];
-  const results = simulateEnhancements(10000, grade, maxLimit, targetPercentage);
+  const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
+  const targetValue = Math.floor(finalLimit * (targetPercentage / 100));
+
+  const results = simulateEnhancements(10000, grade, maxLimit, currentValue, targetValue);
 
   document.getElementById("output").innerHTML = `
     <p>평균 추가된 값: ${results.avgAddedValue}</p>
@@ -80,7 +28,7 @@ document.getElementById("start-simulation").addEventListener("click", () => {
   `;
 });
 
-function simulateEnhancements(iterations, grade, maxLimit, targetPercentage) {
+function simulateEnhancements(iterations, grade, maxLimit, currentValue, targetValue) {
   let totalAddedValue = 0;
   let total1stAttempts = 0;
   let total2ndAttempts = 0;
@@ -91,9 +39,8 @@ function simulateEnhancements(iterations, grade, maxLimit, targetPercentage) {
     // 1차 강화
     let attempts1st = 0;
     let addedValue1st = 0;
-    const targetValue = Math.floor(maxLimit * (targetPercentage / 100));
 
-    while (addedValue1st < targetValue) {
+    while (currentValue + addedValue1st < targetValue) {
       const initialRange = getRandomRange(initialProbability[grade]);
       addedValue1st = getRandomValue(initialRange);
       attempts1st++;
@@ -103,7 +50,7 @@ function simulateEnhancements(iterations, grade, maxLimit, targetPercentage) {
     total1stAttempts += attempts1st;
 
     // 2차 강화
-    let enhancedValue = addedValue1st;
+    let enhancedValue = currentValue + addedValue1st;
     let attempts2nd = 0;
     let addedValue2nd = 0;
     const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
