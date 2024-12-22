@@ -1,36 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("start-simulation").addEventListener("click", () => {
-    const grade = document.getElementById("grade").value;
-    const option = document.getElementById("option").value;
-    const currentValue = parseInt(document.getElementById("current-value").value);
-    const targetPercentage = parseInt(document.getElementById("target-percentage").value);
-
-    if (isNaN(currentValue) || currentValue < 0) {
-      alert("현재 수치를 올바르게 입력해주세요.");
-      return;
-    }
-    if (isNaN(targetPercentage) || targetPercentage < 1 || targetPercentage > 100) {
-      alert("1차 강화 목표 비율을 1~100 사이로 입력해주세요.");
-      return;
-    }
-
-    const maxLimit = maxLimits[option];
-    const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
-    const targetValue = Math.floor(finalLimit * (targetPercentage / 100));
-
-    const results = simulateEnhancements(10000, grade, maxLimit, currentValue, targetValue);
-
-    document.getElementById("output").innerHTML = `
-      <p>평균 추가된 값: ${results.avgAddedValue}</p>
-      <p>1차 강화 평균 횟수: ${results.avg1stAttempts}</p>
-      <p>2차 강화 평균 횟수: ${results.avg2ndAttempts}</p>
-      <p>평균 소모 금전: ${results.avgGoldSpent.toLocaleString()} 전</p>
-      <p>평균 소모 강화석 갯수: ${results.avgStonesSpent}</p>
-    `;
-  });
-});
-
-// 강화 데이터 및 로직
+// 옵션별 최대치 정의
 const maxLimits = {
   "마법치명": 70,
   "방어구관통": 50,
@@ -40,6 +8,7 @@ const maxLimits = {
   "마력증강": 70,
 };
 
+// 초기 강화 확률 설정
 const initialProbability = {
   "신화": [
     { prob: 0.1, range: [20, 30] },
@@ -56,6 +25,7 @@ const initialProbability = {
   // 다른 등급도 필요 시 추가
 };
 
+// 강화 비용 설정
 const enhancementCosts = {
   "신화": { stone: 15, gold: 800000 },
   "전설": { stone: 15, gold: 500000 },
@@ -65,7 +35,53 @@ const enhancementCosts = {
   "일반": { stone: 15, gold: 10000 },
 };
 
-function simulateEnhancements(iterations, grade, maxLimit, currentValue, targetValue) {
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("start-simulation").addEventListener("click", async () => {
+    console.log("시뮬레이션 시작 버튼 클릭됨"); // 디버깅용 로그
+    const grade = document.getElementById("grade").value;
+    const option = document.getElementById("option").value;
+    const currentValue = parseInt(document.getElementById("current-value").value);
+    const targetPercentage = parseInt(document.getElementById("target-percentage").value);
+
+    console.log("grade:", grade); // 등급 확인
+    console.log("option:", option); // 옵션 확인
+    console.log("currentValue:", currentValue); // 현재 수치 확인
+    console.log("targetPercentage:", targetPercentage); // 목표 비율 확인
+
+    if (isNaN(currentValue) || currentValue < 0) {
+      alert("현재 수치를 올바르게 입력해주세요.");
+      return;
+    }
+    if (isNaN(targetPercentage) || targetPercentage < 1 || targetPercentage > 100) {
+      alert("1차 강화 목표 비율을 1~100 사이로 입력해주세요.");
+      return;
+    }
+
+    const maxLimit = maxLimits[option]; // maxLimits가 제대로 정의되어 있는지 확인
+    const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
+    const targetValue = Math.floor(finalLimit * (targetPercentage / 100));
+
+    console.log("maxLimit:", maxLimit); // 최대 한계 확인
+    console.log("finalLimit:", finalLimit); // 최종 한계 확인
+    console.log("targetValue:", targetValue); // 목표값 확인
+
+    document.getElementById("output").innerHTML = "<p>시뮬레이션 실행 중...</p>";
+
+    const results = await simulateEnhancements(10000, grade, maxLimit, currentValue, targetValue);
+
+    console.log("시뮬레이션 결과:", results); // 결과 확인
+
+    document.getElementById("output").innerHTML = `
+      <p>평균 추가된 값: ${results.avgAddedValue}</p>
+      <p>1차 강화 평균 횟수: ${results.avg1stAttempts}</p>
+      <p>2차 강화 평균 횟수: ${results.avg2ndAttempts}</p>
+      <p>평균 소모 금전: ${results.avgGoldSpent.toLocaleString()} 전</p>
+      <p>평균 소모 강화석 갯수: ${results.avgStonesSpent}</p>
+    `;
+  });
+});
+
+async function simulateEnhancements(iterations, grade, maxLimit, currentValue, targetValue) {
   let totalAddedValue = 0;
   let total1stAttempts = 0;
   let total2ndAttempts = 0;
