@@ -1,5 +1,3 @@
-
-
 // 옵션별 최대치 정의
 const maxLimits = {
   "마법치명": 70,
@@ -37,6 +35,8 @@ const enhancementCosts = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM 로드 완료");
+
   document.getElementById("start-simulation").addEventListener("click", async () => {
     console.log("시뮬레이션 시작 버튼 클릭됨");
 
@@ -84,6 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function simulateEnhancements(iterations, grade, maxLimit, currentValue, targetValue) {
+  console.log("시뮬레이션 함수 실행 시작");
+
   let totalAddedValue = 0;
   let total1stAttempts = 0;
   let total2ndAttempts = 0;
@@ -137,6 +139,8 @@ async function simulateEnhancements(iterations, grade, maxLimit, currentValue, t
     total2ndAttempts += attempts2nd;
     totalAddedValue += addedValue1st + addedValue2nd;
   }
+
+  console.log("시뮬레이션 반복 완료");
 
   return {
     avgAddedValue: Math.floor(totalAddedValue / iterations),
