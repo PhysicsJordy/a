@@ -1,3 +1,4 @@
+// 옵션 최대치 설정
 const maxLimits = {
   "마법치명": 70,
   "방어구관통": 50,
@@ -7,65 +8,135 @@ const maxLimits = {
   "마력증강": 70,
 };
 
-const gradeCosts = {
-  "일반~전설": { stone: 5, gold: 50000 },
-  "신화 이상": { stone: 15, gold: 800000 },
+// 초기 강화 확률 설정
+const initialProbability = {
+  "신화": [
+    { prob: 0.1, range: [20, 30] },
+    { prob: 19.9, range: [15, 25] },
+    { prob: 40.0, range: [10, 15] },
+    { prob: 40.0, range: [5, 10] },
+  ],
+  "전설": [
+    { prob: 1.0, range: [20, 30] },
+    { prob: 19.0, range: [15, 25] },
+    { prob: 20.0, range: [10, 15] },
+    { prob: 60.0, range: [5, 10] },
+  ],
+  "영웅": [
+    { prob: 1.0, range: [20, 30] },
+    { prob: 19.0, range: [15, 25] },
+    { prob: 20.0, range: [10, 15] },
+    { prob: 60.0, range: [5, 10] },
+  ],
+  "희귀": [
+    { prob: 1.0, range: [20, 30] },
+    { prob: 19.0, range: [15, 25] },
+    { prob: 20.0, range: [10, 15] },
+    { prob: 60.0, range: [5, 10] },
+  ],
+  "고급": [
+    { prob: 1.0, range: [20, 30] },
+    { prob: 19.0, range: [15, 25] },
+    { prob: 20.0, range: [10, 15] },
+    { prob: 60.0, range: [5, 10] },
+  ],
+  "일반": [
+    { prob: 1.0, range: [20, 30] },
+    { prob: 19.0, range: [15, 25] },
+    { prob: 20.0, range: [10, 15] },
+    { prob: 60.0, range: [5, 10] },
+  ],
+};
+
+// 강화 비용 설정
+const enhancementCosts = {
+  "신화": { stone: 15, gold: 800000 },
+  "전설": { stone: 15, gold: 500000 },
+  "영웅": { stone: 15, gold: 300000 },
+  "희귀": { stone: 15, gold: 100000 },
+  "고급": { stone: 15, gold: 50000 },
+  "일반": { stone: 15, gold: 10000 },
 };
 
 document.getElementById("start-simulation").addEventListener("click", () => {
   const grade = document.getElementById("grade").value;
   const option = document.getElementById("option").value;
-  const currentValue = parseInt(document.getElementById("value").value);
+  const targetPercentage = parseInt(document.getElementById("target-percentage").value);
 
-  if (isNaN(currentValue) || currentValue <= 0) {
-    alert("능력치를 올바르게 입력해주세요!");
+  if (isNaN(targetPercentage) || targetPercentage < 1 || targetPercentage > 100) {
+    alert("목표 비율을 1~100 사이로 입력해주세요.");
     return;
   }
 
   const maxLimit = maxLimits[option];
-  const maxPossibleIncrease = Math.floor(maxLimit * 0.3);
-  const finalLimit = maxLimit + maxPossibleIncrease;
+  const results = simulateEnhancements(10000, grade, maxLimit, targetPercentage);
 
-  // 최초 능력 부여
-  const initialProbabilities = grade === "일반~전설"
-    ? [{ prob: 1, range: [20, 30] }, { prob: 19, range: [15, 25] }, { prob: 20, range: [10, 15] }, { prob: 60, range: [5, 10] }]
-    : [{ prob: 0.1, range: [20, 30] }, { prob: 19.9, range: [15, 25] }, { prob: 40, range: [10, 15] }, { prob: 40, range: [5, 10] }];
-
-  const initialRange = getRandomRange(initialProbabilities);
-  const initialEnhancement = getRandomValue(initialRange);
-
-  // 강화 과정
-  let totalStones = gradeCosts[grade].stone;
-  let totalGold = gradeCosts[grade].gold;
-
-  let enhancedValue = currentValue + initialEnhancement;
-  let attempts = 0;
-
-  while (enhancedValue < finalLimit) {
-    const enhancementChance = getEnhancementChance(enhancedValue, maxLimit, finalLimit);
-    const additionalEnhancement = enhancementChance === "max"
-      ? getRandomValue([enhancedValue + 1, finalLimit])
-      : enhancementChance === "mid"
-      ? getRandomValue([enhancedValue + 1, Math.floor((enhancedValue + finalLimit) / 2)])
-      : 1;
-
-    enhancedValue += additionalEnhancement;
-    totalStones += gradeCosts[grade].stone;
-    totalGold += gradeCosts[grade].gold;
-    attempts++;
-  }
-
-  // 결과 출력
   document.getElementById("output").innerHTML = `
-    <p>강화 완료!</p>
-    <p>최종 능력치: ${enhancedValue} / 최대 가능치: ${finalLimit}</p>
-    <p>강화 시도 횟수: ${attempts}</p>
-    <p>총 소모 강화석: ${totalStones}개</p>
-    <p>총 소모 금전: ${totalGold.toLocaleString()}전</p>
+    <p>평균 추가된 값: ${results.avgAddedValue}</p>
+    <p>1차 강화 평균 횟수: ${results.avg1stAttempts}</p>
+    <p>2차 강화 평균 횟수: ${results.avg2ndAttempts}</p>
+    <p>평균 소모 금전: ${results.avgGoldSpent.toLocaleString()} 전</p>
+    <p>평균 소모 강화석 갯수: ${results.avgStonesSpent}</p>
   `;
 });
 
-// 유틸리티 함수
+function simulateEnhancements(iterations, grade, maxLimit, targetPercentage) {
+  let totalAddedValue = 0;
+  let total1stAttempts = 0;
+  let total2ndAttempts = 0;
+  let totalGoldSpent = 0;
+  let totalStonesSpent = 0;
+
+  for (let i = 0; i < iterations; i++) {
+    // 1차 강화
+    let attempts1st = 0;
+    let addedValue1st = 0;
+    const targetValue = Math.floor(maxLimit * (targetPercentage / 100));
+
+    while (addedValue1st < targetValue) {
+      const initialRange = getRandomRange(initialProbability[grade]);
+      addedValue1st = getRandomValue(initialRange);
+      attempts1st++;
+      totalGoldSpent += 10000; // 초기화 비용
+    }
+
+    total1stAttempts += attempts1st;
+
+    // 2차 강화
+    let enhancedValue = addedValue1st;
+    let attempts2nd = 0;
+    let addedValue2nd = 0;
+    const finalLimit = maxLimit + Math.floor(maxLimit * 0.3);
+    const costData = enhancementCosts[grade];
+
+    while (enhancedValue < finalLimit) {
+      const enhancementChance = getEnhancementChance(enhancedValue, maxLimit, finalLimit);
+      const additionalEnhancement = enhancementChance === "max"
+        ? getRandomValue([enhancedValue + 1, finalLimit])
+        : enhancementChance === "mid"
+        ? getRandomValue([enhancedValue + 1, Math.floor((enhancedValue + finalLimit) / 2)])
+        : 1;
+
+      enhancedValue += additionalEnhancement;
+      addedValue2nd += additionalEnhancement;
+      totalStonesSpent += costData.stone;
+      totalGoldSpent += costData.gold;
+      attempts2nd++;
+    }
+
+    total2ndAttempts += attempts2nd;
+    totalAddedValue += addedValue1st + addedValue2nd;
+  }
+
+  return {
+    avgAddedValue: Math.floor(totalAddedValue / iterations),
+    avg1stAttempts: Math.floor(total1stAttempts / iterations),
+    avg2ndAttempts: Math.floor(total2ndAttempts / iterations),
+    avgGoldSpent: Math.floor(totalGoldSpent / iterations),
+    avgStonesSpent: Math.floor(totalStonesSpent / iterations),
+  };
+}
+
 function getRandomRange(probabilities) {
   const rand = Math.random() * 100;
   let cumulative = 0;
