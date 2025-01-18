@@ -32,14 +32,15 @@ body {
     margin-bottom: 15px;
 }
 
+/* 라벨, 입력칸 기본 스타일 */
 label {
-    display: inline-block;
-    width: 150px;
+    display: inline-block; /* 기본적으로 가로 배치 */
+    width: 150px;          /* 라벨 너비 */
     font-weight: bold;
 }
 
 input[type="number"] {
-    width: 120px;
+    width: 120px;          /* 기본 입력 칸 너비 */
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -62,4 +63,29 @@ input[type="number"]:focus {
     font-size: 1.2em;
     font-weight: bold;
     color: #007BFF;
+}
+
+/* -------------------------------------
+   반응형(모바일) 대응: 화면 폭이 600px 이하일 때 
+   라벨과 입력칸을 세로로 배치하여 겹침 방지
+-------------------------------------- */
+@media (max-width: 600px) {
+    /* 라벨을 세로로 배치하기 위해 block으로 변경 */
+    label {
+        display: block;
+        width: 100%;       /* 한 줄 전체 사용 */
+        margin-bottom: 5px;
+    }
+    /* 각 input-field 내부도 세로로 배치 */
+    .input-field {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* 시작점에 정렬 */
+    }
+    /* 모바일에서는 입력칸을 가로폭 100%로 확대 */
+    input[type="number"] {
+        width: 100% !important;  
+        max-width: 300px;       /* 필요 시 최대 폭 제한 */
+        box-sizing: border-box;  /* 패딩 포함해 폭 계산 */
+    }
 }
