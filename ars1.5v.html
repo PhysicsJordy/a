@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- 반응형 화면 대응을 위한 viewport 설정 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>스탯 계산기1.4v</title>
+    <title>스탯 계산기1.5v</title>
     <!-- 기존 CSS 연결 -->
     <link rel="stylesheet" href="ars.css">
 
@@ -12,26 +12,26 @@
     <style>
         /* 메인 컨테이너(좌우 두 칸) 설정 */
         .flex-container {
-            display: flex;         /* 옆으로 나열 */
-            flex-wrap: wrap;       /* 화면이 좁아지면 자동 줄바꿈 */
-            gap: 30px;             /* 좌우 컨테이너 사이 간격 */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
             justify-content: center;
             margin: 0 auto;
-            max-width: 1200px;     /* 너무 넓어지지 않도록 최대 폭 제한 */
+            max-width: 1200px;
             box-sizing: border-box;
         }
 
         /* 각 계산기 영역을 감싸는 container */
         .container {
             width: 100%;
-            max-width: 600px;      /* 각 구역의 최대 폭 */
+            max-width: 600px;
             box-sizing: border-box;
         }
 
         /* 그룹 내부 input-field 배치 조정 */
         .input-field {
             display: flex;
-            flex-wrap: wrap;       /* 레이블, 입력칸이 화면에 따라 줄바꿈됨 */
+            flex-wrap: wrap;
             align-items: center;
             margin-bottom: 8px;
         }
@@ -42,7 +42,7 @@
             margin-right: 8px;
         }
 
-        /* 작은 화면(태블릿 이하)에서 레이블, 입력박스 세로 배치 */
+        /* 작은 화면(태블릿 이하)에서 레이블, 입력칸 세로 배치 */
         @media (max-width: 768px) {
             .flex-container {
                 flex-direction: column;
@@ -62,7 +62,7 @@
     </style>
 </head>
 <body>
-    <!-- flex 레이아웃을 위한 컨테이너 클래스로 변경 -->
+    <!-- flex 레이아웃을 위한 컨테이너 -->
     <div class="flex-container">
         <!-- [왼쪽] 기존 방어구 관통 계산기 -->
         <div class="container">
@@ -277,7 +277,6 @@
                     <label for="inner-strength-pix">몬스터일지 특수:</label>
                     <input type="number" id="monster-diary-pix" value="0">
                 </div>
-                
             </div>
 
             <!-- 그룹 D: 독립 변수 -->
@@ -582,7 +581,23 @@
         </div>
     </div>
 
-    <!-- 기존 JS -->
+    <!-- ===================================== -->
+    <!-- [추가] 프로필 저장/불러오기 버튼 영역 -->
+    <!-- ===================================== -->
+    <hr>
+    <div style="text-align:center; margin-bottom: 50px;">
+        <h2>프로필 저장/불러오기</h2>
+        <button id="saveProfile1">프로필1 저장</button>
+        <button id="loadProfile1">프로필1 불러오기</button>
+        &nbsp;&nbsp;
+        <button id="saveProfile2">프로필2 저장</button>
+        <button id="loadProfile2">프로필2 불러오기</button>
+        &nbsp;&nbsp;
+        <button id="saveProfile3">프로필3 저장</button>
+        <button id="loadProfile3">프로필3 불러오기</button>
+    </div>
+
+    <!-- 기존 JS 연결 -->
     <script src="ars.js"></script>
 </body>
 </html>
