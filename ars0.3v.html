@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스탯 계산기0.3v</title>
+    <link rel="stylesheet" href="ars.css">
+</head>
+<body>
+    <div class="container">
+        <h1>스탯 계산기</h1>
+
+        <!-- 그룹 A: 기본 스탯 입력 -->
+        <div class="group" id="group-a">
+            <h2>그룹 A: 기본 스탯</h2>
+            <div class="input-field">
+                <label for="strength">힘:</label>
+                <input type="number" id="strength" value="0">
+            </div>
+            <div class="input-field">
+                <label for="agility">민첩:</label>
+                <input type="number" id="agility" value="0">
+            </div>
+            <div class="input-field">
+                <label for="intelligence">지력:</label>
+                <input type="number" id="intelligence" value="0">
+            </div>
+            <div class="input-field">
+                <label for="wisdom">지혜:</label>
+                <input type="number" id="wisdom" value="0">
+            </div>
+            <div class="input-field">
+                <label for="health">건강:</label>
+                <input type="number" id="health" value="0">
+            </div>
+        </div>
+
+        <!-- 그룹 B: 장비별 입력 -->
+        <div class="group" id="group-b">
+            <h2>그룹 B: 장비</h2>
+            <div id="equipment-list">
+                <!-- 장비 입력 필드 추가 -->
+            </div>
+        </div>
+
+        <!-- 그룹 C: 고정 부위 -->
+        <div class="group" id="group-c">
+            <h2>그룹 C: 고정 수치</h2>
+            <div class="input-field">
+                <label for="transcendent-starter">환수-초월(시동):</label>
+                <input type="number" id="transcendent-starter" value="0">
+            </div>
+            <div class="input-field">
+                <label for="transcendent-guardian1">환수-초월(수호1):</label>
+                <input type="number" id="transcendent-guardian1" value="0">
+            </div>
+            <div class="input-field">
+                <label for="transcendent-guardian2">환수-초월(수호2):</label>
+                <input type="number" id="transcendent-guardian2" value="0">
+            </div>
+            <div class="input-field">
+                <label for="family">가문:</label>
+                <input type="number" id="family" value="0">
+            </div>
+            <div class="input-field">
+                <label for="guardian-blessing">무신의 가호:</label>
+                <input type="number" id="guardian-blessing" value="0">
+            </div>
+            <div class="input-field">
+                <label for="hunting-elixir">사냥 종합 시약:</label>
+                <input type="number" id="hunting-elixir" value="0">
+            </div>
+            <div class="input-field">
+                <label for="hunting-potion">사냥 필수 물약:</label>
+                <input type="number" id="hunting-potion" value="0">
+            </div>
+            <div class="input-field">
+                <label for="inner-strength">내공 강화:</label>
+                <input type="number" id="inner-strength" value="0">
+            </div>
+            <div class="input-field">
+                <label for="first-rank">1품의:</label>
+                <input type="number" id="first-rank" value="0">
+            </div>
+        </div>
+
+        <!-- 결과 출력 -->
+        <div class="group" id="result">
+            <h2>결과</h2>
+            <div class="input-field">
+                <label>총 방어구 관통:</label>
+                <span id="total-penetration">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="ars.js"></script>
+</body>
+</html>
