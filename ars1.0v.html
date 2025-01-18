@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>방관, 방무 계산기1.0v</title>
+    <link rel="stylesheet" href="ars.css">
+</head>
+<body>
+    <!-- flex 레이아웃으로 좌측: 방어구 관통, 우측: 방어도 무시 -->
+    <div style="display: flex; gap: 30px;">
+        <!-- [왼쪽] 기존 방어구 관통 계산기 -->
+        <div class="container">
+            <h1>방어구관통 계산기</h1>
+            <h4 style="text-align: right;">Made by: 죠링이@연 (죠슝@연)</h4>
+
+            <!-- 그룹 A: 기본 스탯 입력 -->
+            <div class="group" id="group-a">
+                <h2>그룹 A: 기본 스탯</h2>
+                <div class="input-field">
+                    <label for="strength">힘:</label>
+                    <input type="number" id="strength" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="agility">민첩:</label>
+                    <input type="number" id="agility" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="intelligence">지력:</label>
+                    <input type="number" id="intelligence" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="wisdom">지혜:</label>
+                    <input type="number" id="wisdom" value="0">
+                </div>
+            </div>
+
+            <!-- 그룹 B: 장비별 입력 -->
+            <div class="group" id="group-b">
+                <h2>그룹 B: 장비 &nbsp;&nbsp;&nbsp;고정값&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;퍼센트값</h2>
+                <div id="equipment-list">
+                    <div class="input-field">
+                        <label for="neck">목/어깨장식:</label>
+                        <input type="number" id="neck-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="neck-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="weapon">무기:</label>
+                        <input type="number" id="weapon-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="weapon-engraved">무기(각인):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="weapon-engraved-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="weapon-polish">무기(돋):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="weapon-polish-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="shield">방패/보조무기:</label>
+                        <input type="number" id="shield-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="helmet">투구:</label>
+                        <input type="number" id="helmet-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="helmet-engraved">투구(각인):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="helmet-engraved-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="helmet-polish">투구(돋):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="helmet-polish-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="armor">갑옷:</label>
+                        <input type="number" id="armor-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="armor-engraved">갑옷(각인):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="armor-engraved-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="armor-polish">갑옷(돋):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="armor-polish-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="left-hand">왼손:</label>
+                        <input type="number" id="left-hand-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="left-hand-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="right-hand">오른손:</label>
+                        <input type="number" id="right-hand-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="right-hand-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="sub1">보조1:</label>
+                        <input type="number" id="sub1-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="sub1-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="sub2">보조2:</label>
+                        <input type="number" id="sub2-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="sub2-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="shoes">신발:</label>
+                        <input type="number" id="shoes-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="shoes-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="face-decoration">얼굴장식:</label>
+                        <input type="number" id="face-decoration-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="face-decoration-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="cape">망토:</label>
+                        <input type="number" id="cape-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="cape-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="set-clothes">세트옷(가루다 등):</label>
+                        <input type="number" id="set-clothes-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="set-clothes-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="set-option">세트옵션:</label>
+                        <input type="number" id="set-option-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="set-option-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-weapon">신강-무기:</label>
+                        <input type="number" id="divine-weapon-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-armer">신강-갑옷:</label>
+                        <input type="number" id="divine-armer-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-helmet">신강-투구:</label>
+                        <input type="number" id="divine-helmet-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-nec-fixed">신강-목:</label>
+                        <input type="number" id="divine-nec-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-cloak-fixed">신강-망토:</label>
+                        <input type="number" id="divine-cloak-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="equipment-fixed">신수장비:</label>
+                        <input type="number" id="equipment-fixed" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="style-fixed">칭호:</label>
+                        <input type="number" id="style-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="style-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="Bdragon-percent">황룡각인:</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="Bdragon-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="engine-fixed">시동환수:</label>
+                        <input type="number" id="engine-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="engine-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="engine1-fixed">수호환수1:</label>
+                        <input type="number" id="engine1-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="engine1-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="engine2-fixed">수호환수2:</label>
+                        <input type="number" id="engine2-fixed" placeholder="고정값" value="0">
+                        <input type="number" id="engine2-percent" placeholder="퍼센트값" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 그룹 C: 고정 부위 -->
+            <div class="group" id="group-c">
+                <h2>그룹 C: 고정 수치</h2>
+                <div class="input-field">
+                    <label for="transcendent-starter-pix">환수-초월(시동):</label>
+                    <input type="number" id="transcendent-starter-pix" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="transcendent-guardian1-pix">환수-초월(수호1):</label>
+                    <input type="number" id="transcendent-guardian1-pix" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="transcendent-guardian2-pix">환수-초월(수호2):</label>
+                    <input type="number" id="transcendent-guardian2-pix" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="family-pix">가문:</label>
+                    <input type="number" id="family-pix" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="guardian-blessing-pix">무신의 가호:</label>
+                    <input type="number" id="guardian-blessing-pix" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="hunting-elixir-pix">사냥 종합 시약:</label>
+                    <input type="number" id="hunting-elixir-pix" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="hunting-potion-pix">사냥 필수 물약:</label>
+                    <input type="number" id="hunting-potion-pix" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="inner-strength-pix">내공 강화 수치입력:</label>
+                    <input type="number" id="inner-strength-pix" value="0">
+                </div>
+            </div>
+
+            <!-- 그룹 D: 독립 변수 -->
+            <div class="group" id="group-d">
+                <h2>그룹 D: 퍼센트값</h2>
+                <div class="input-field">
+                    <label for="dqwon-1">내공 강화(신화):</label>
+                    <input type="number" id="dqwon-1" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="dqwon-2">1품의/명품의:</label>
+                    <input type="number" id="dqwon-2" value="0">
+                </div>
+            </div>
+
+            <!-- 결과 영역 -->
+            <div class="group" id="result">
+                <h2>결과</h2>
+                <div class="input-field">
+                    <label>그룹 A 총 고정수치:</label>
+                    <span id="group-a-fixed">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 B 총 고정수치:</label>
+                    <span id="group-b-fixed">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 B 총 퍼센트:</label>
+                    <span id="group-b-percent">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 C 총 고정수치:</label>
+                    <span id="group-c-pix">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 D 총 퍼센트:</label>
+                    <span id="group-d-total">0</span>
+                </div>
+                <div class="input-field">
+                    <label>최종 계산 결과:</label>
+                    <span id="total-penetration">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- [오른쪽] 새로 추가한 방어도 무시 계산기 -->
+        <div class="container">
+            <h1>방어도 무시 계산기</h1>
+            <h4 style="text-align: right;">Made by: 죠링이@연 (죠슝@연)</h4>
+
+            <!-- 그룹 A2: 기본 스탯 입력 -->
+            <div class="group" id="group-a2">
+                <h2>그룹 A: 기본 스탯</h2>
+                <div class="input-field">
+                    <label for="strength2">힘:</label>
+                    <input type="number" id="strength2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="agility2">민첩:</label>
+                    <input type="number" id="agility2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="intelligence2">지력:</label>
+                    <input type="number" id="intelligence2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="wisdom2">지혜:</label>
+                    <input type="number" id="wisdom2" value="0">
+                </div>
+            </div>
+
+            <!-- 그룹 B2: 장비별 입력 -->
+            <div class="group" id="group-b2">
+                <h2>그룹 B: 장비 &nbsp;&nbsp;&nbsp;고정값&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;퍼센트값</h2>
+                <div id="equipment-list2">
+                    <div class="input-field">
+                        <label for="neck-fixed2">목/어깨장식:</label>
+                        <input type="number" id="neck-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="neck-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="weapon-fixed2">무기:</label>
+                        <input type="number" id="weapon-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="weapon-engraved-percent2">무기(각인):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="weapon-engraved-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="weapon-polish-percent2">무기(돋):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="weapon-polish-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="shield-fixed2">방패/보조무기:</label>
+                        <input type="number" id="shield-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="helmet-fixed2">투구:</label>
+                        <input type="number" id="helmet-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="helmet-engraved-percent2">투구(각인):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="helmet-engraved-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="helmet-polish-percent2">투구(돋):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="helmet-polish-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="armor-fixed2">갑옷:</label>
+                        <input type="number" id="armor-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="armor-engraved-percent2">갑옷(각인):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="armor-engraved-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="armor-polish-percent2">갑옷(돋):</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="armor-polish-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="left-hand-fixed2">왼손:</label>
+                        <input type="number" id="left-hand-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="left-hand-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="right-hand-fixed2">오른손:</label>
+                        <input type="number" id="right-hand-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="right-hand-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="sub1-fixed2">보조1:</label>
+                        <input type="number" id="sub1-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="sub1-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="sub2-fixed2">보조2:</label>
+                        <input type="number" id="sub2-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="sub2-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="shoes-fixed2">신발:</label>
+                        <input type="number" id="shoes-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="shoes-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="face-decoration-fixed2">얼굴장식:</label>
+                        <input type="number" id="face-decoration-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="face-decoration-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="cape-fixed2">망토:</label>
+                        <input type="number" id="cape-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="cape-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="set-clothes-fixed2">세트옷(가루다 등):</label>
+                        <input type="number" id="set-clothes-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="set-clothes-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="set-option-fixed2">세트옵션:</label>
+                        <input type="number" id="set-option-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="set-option-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-weapon-fixed2">신강-무기:</label>
+                        <input type="number" id="divine-weapon-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-armer-fixed2">신강-갑옷:</label>
+                        <input type="number" id="divine-armer-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-helmet-fixed2">신강-투구:</label>
+                        <input type="number" id="divine-helmet-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-nec-fixed2">신강-목:</label>
+                        <input type="number" id="divine-nec-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="divine-cloak-fixed2">신강-망토:</label>
+                        <input type="number" id="divine-cloak-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="equipment-fixed2">신수장비:</label>
+                        <input type="number" id="equipment-fixed2" placeholder="고정값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="style-fixed2">칭호:</label>
+                        <input type="number" id="style-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="style-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="Bdragon-percent2">황룡각인:</label>
+                        <input type="text" style="visibility: hidden; width: 123px;" disabled>
+                        <input type="number" id="Bdragon-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="engine-fixed2">시동환수:</label>
+                        <input type="number" id="engine-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="engine-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="engine1-fixed2">수호환수1:</label>
+                        <input type="number" id="engine1-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="engine1-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                    <div class="input-field">
+                        <label for="engine2-fixed2">수호환수2:</label>
+                        <input type="number" id="engine2-fixed2" placeholder="고정값" value="0">
+                        <input type="number" id="engine2-percent2" placeholder="퍼센트값" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 그룹 C2: 고정 부위 -->
+            <div class="group" id="group-c2">
+                <h2>그룹 C: 고정 수치</h2>
+                <div class="input-field">
+                    <label for="transcendent-starter-pix2">환수-초월(시동):</label>
+                    <input type="number" id="transcendent-starter-pix2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="transcendent-guardian1-pix2">환수-초월(수호1):</label>
+                    <input type="number" id="transcendent-guardian1-pix2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="transcendent-guardian2-pix2">환수-초월(수호2):</label>
+                    <input type="number" id="transcendent-guardian2-pix2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="family-pix2">가문:</label>
+                    <input type="number" id="family-pix2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="guardian-blessing-pix2">무신의 가호:</label>
+                    <input type="number" id="guardian-blessing-pix2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="hunting-elixir-pix2">사냥 종합 시약:</label>
+                    <input type="number" id="hunting-elixir-pix2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="hunting-potion-pix2">사냥 필수 물약:</label>
+                    <input type="number" id="hunting-potion-pix2" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="inner-strength-pix2">내공 강화 수치입력:</label>
+                    <input type="number" id="inner-strength-pix2" value="0">
+                </div>
+            </div>
+
+            <!-- 그룹 D2: 독립 변수 -->
+            <div class="group" id="group-d2">
+                <h2>그룹 D: 퍼센트값</h2>
+                <div class="input-field">
+                    <label for="dqwon-12">내공 강화(신화):</label>
+                    <input type="number" id="dqwon-12" value="0">
+                </div>
+                <div class="input-field">
+                    <label for="dqwon-22">1품의/명품의:</label>
+                    <input type="number" id="dqwon-22" value="0">
+                </div>
+            </div>
+
+            <!-- 결과 영역 2 -->
+            <div class="group" id="result2">
+                <h2>결과</h2>
+                <div class="input-field">
+                    <label>그룹 A 총 고정수치:</label>
+                    <span id="group-a-fixed2">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 B 총 고정수치:</label>
+                    <span id="group-b-fixed2">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 B 총 퍼센트:</label>
+                    <span id="group-b-percent2">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 C 총 고정수치:</label>
+                    <span id="group-c-pix2">0</span>
+                </div>
+                <div class="input-field">
+                    <label>그룹 D 총 퍼센트:</label>
+                    <span id="group-d-total2">0</span>
+                </div>
+                <div class="input-field">
+                    <label>최종 계산 결과:</label>
+                    <span id="total-penetration2">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="ars.js"></script>
+</body>
+</html>
