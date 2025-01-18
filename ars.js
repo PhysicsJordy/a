@@ -1,40 +1,36 @@
-const calculate = () => {
-    // 그룹 A 계산
-    const strength = parseFloat(document.getElementById('strength').value) || 0;
-    const agility = parseFloat(document.getElementById('agility').value) || 0;
-    const intelligence = parseFloat(document.getElementById('intelligence').value) || 0;
-    const wisdom = parseFloat(document.getElementById('wisdom').value) || 0;
-    const health = parseFloat(document.getElementById('health').value) || 0;
-    const groupASum = strength + agility + intelligence + wisdom + health;
+document.addEventListener("DOMContentLoaded", () => {
+    // 그룹 A의 입력 필드 ID 목록
+    const groupAStats = ["strength", "agility", "intelligence", "wisdom"];
 
-    // 그룹 B 계산
-    let groupBTotal = 0;
-    document.querySelectorAll('#equipment-list .input-field').forEach(field => {
-        const fixed = parseFloat(field.querySelector('input[placeholder="고정값"]').value) || 0;
-        const percent = parseFloat(field.querySelector('input[placeholder="퍼센트값"]').value) || 0;
-        groupBTotal += fixed * (1 + percent / 100);
+    // 결과를 표시할 요소 추가
+    const groupAContainer = document.getElementById("group-a");
+    const resultField = document.createElement("div");
+    resultField.className = "input-field";
+    resultField.innerHTML = `
+        <label>기본 스탯 합계 / 100:</label>
+        <span id="group-a-result">0.0</span>
+    `;
+    groupAContainer.appendChild(resultField);
+
+    // 스탯 값 계산 함수
+    const calculateGroupA = () => {
+        let total = 0;
+
+        // 각 스탯 값을 더함
+        groupAStats.forEach(id => {
+            const value = parseFloat(document.getElementById(id).value) || 0;
+            total += value;
+        });
+
+        // 합계 / 100을 소수점 첫째자리까지 계산
+        const result = (total / 100).toFixed(1);
+
+        // 결과 업데이트
+        document.getElementById("group-a-result").textContent = result;
+    };
+
+    // 입력값 변경 시 계산 수행
+    groupAStats.forEach(id => {
+        document.getElementById(id).addEventListener("input", calculateGroupA);
     });
-
-    // 그룹 C 계산
-    let groupCFixedTotal = 0;
-    let groupCPercent = 0;
-    document.querySelectorAll('#group-c .input-field input').forEach(input => {
-        const id = input.id.toLowerCase();
-        if (id.includes("percent")) {
-            groupCPercent += parseFloat(input.value) || 0;
-        } else {
-            groupCFixedTotal += parseFloat(input.value) || 0;
-        }
-    });
-
-    // 최종 계산
-    const totalPenetration = (groupBTotal * (1 + groupCPercent / 100)) + groupASum + groupCFixedTotal;
-
-    // 결과 업데이트
-    document.getElementById('total-penetration').innerText = totalPenetration.toFixed(2);
-};
-
-// 이벤트 리스너 추가
-document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', calculate);
 });
